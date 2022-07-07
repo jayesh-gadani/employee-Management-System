@@ -29,18 +29,18 @@ class HomeController extends Controller
     }
     public function email_veryfy()
     {
-        $token=$_GET["verifyToken"];
-        $d=new DateTime();
+        $token = $_GET["verifyToken"];
+        $date = new DateTime();
 
-// update query
+        // update query
    
-        $q = User::where('token', $token)->first();
-        $q->token='';
-        $q->email_verified_at=$d;
-        $q->save();
+        $user = User::where('token', $token)->first();
+        $user->token = '';
+        $user->email_verified_at=$date;
+        $user->save();
 
         return redirect()->route('login');
-       // return view('__/login');
+       
 
     }
 }

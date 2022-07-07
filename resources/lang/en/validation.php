@@ -142,8 +142,8 @@ return [
     */
 
     'custom' => [
-        'password' => [
-            'Match' => 'Password Does not matched with database',
+        'match_password' => [
+            'required' => 'Password Does not matched with database',
         ],
     ],
 

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/email_verfiy', [App\Http\Controllers\HomeController::class, 'email_veryfy'])->name('email_verfiy');
 
 Route::any('/change_password',[ChangePasswordController::class,'index'])->name('change_password');
+
+//Forgot Password
+Route::any('forgot_password',[MailController::class,'forgotPassword'])->name('forgot_password');
+Route::any('forgot_password_link',[MailController::class,'forgotPasswordLink'])->name('forgotPasswordLink');
+Route::any('reset_password',[MailController::class,'resetPassword'])->name('resetPassword');
+
 
 //user
 Route::get('/user',[UserController::class,'index'])->name('user');

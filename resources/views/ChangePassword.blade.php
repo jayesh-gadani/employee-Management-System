@@ -54,6 +54,11 @@
                     @error('password')
                       <div style="color:red">{{ $message }}</div>
                     @enderror
+                    @error('match_password')
+                      <div style="color:red">{{ $message }}</div>
+                    @enderror
+
+                    
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">New Password</label>

@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -36,25 +37,40 @@
                 <div class="alert alert-success" role="alert">
                   {{ Session::get('sucess') }}
                 </div>
-              @endif
+        @endif
       @if(Session::has('error'))
                 <div class="alert alert-success" role="alert">
                   {{ Session::get('error') }}
                 </div>
       @endif
 
-      <form method="POST" action="{{ route('forgot_password') }}">
+      <form method="POST" action="{{ route('resetPassword') }}">
          @csrf
-
+         <input type="hidden" name="token" value="{{$token}}">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
+          <input type="password" class="form-control" placeholder="New Password" name="password" value="{{ old('password')}}">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
-         @error('email')
+
+         @error('password')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+         <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" value="{{ old('password')}}">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+
+         @error('confirmPassword')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
@@ -90,3 +106,5 @@
 
 
 @endsection
+
+
