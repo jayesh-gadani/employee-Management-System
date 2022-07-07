@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+{{$token}}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -26,7 +27,7 @@
                                 @enderror
                             </div>
                         </div>
-zxmcmcnzxmcn
+
                         <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 

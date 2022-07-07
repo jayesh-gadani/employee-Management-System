@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-
+use Validator;
 
 class ChangePasswordController extends Controller
 {
@@ -36,15 +36,27 @@ class ChangePasswordController extends Controller
            
             $data = $request->all();
 
-            $validated = $request->validate([
-                
+            /*$validated = $request->validate([
                 'password'=>'required|min:8|max:14',
+                'match_password'=>[Rule::when(!Hash::check($data['password'], $user['password']),['required'])],
                 'newPassword' => 'required|min:8|max:14',
                 'confirmPassword' => 'required|min:8|max:14|same:newPassword',
+            ]);*/
 
+            $rules = [
+                'password'=>'required|min:8|max:14',
+                'match_password'=>[Rule::when(!Hash::check($data['password'], $user['password']),['required'])],
+                'newPassword' => 'required|min:8|max:14',
+                'confirmPassword' => 'required|min:8|max:14|same:newPassword',
+            ];
 
+            //$validator = Validator::make($data, $rules);
+
+            $validated = $request->validate($rules);
+
+            // if ($validator->fails()) {
                 
-            ]);
+            // }
 
             if (Hash::check($data['password'], $user['password'])) {
 
