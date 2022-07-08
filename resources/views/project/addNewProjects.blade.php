@@ -77,7 +77,7 @@
                   <label>Date:</label>
 
                   <div class="input-group date"  data-target-input="nearest">
-                        <input type="date" name="startDate" class="form-control" value="{{old("startDate")}}" data-target="#reservationdate" />
+                        <input type="date" name="startDate" class="form-control" value="{{old('startDate') ? old('startDate') : $project->start_date}}}}" data-target="#reservationdate" />
                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -87,21 +87,12 @@
                     @enderror
                   <!-- /.input group -->
                 </div>
-                <!-- /.form group -->
-
-              
-                <!-- IP mask -->
-                
-                <!-- /.form group -->
+               
 
               </div>
-              <!-- /.card-body -->
+              
             </div>
-            <!-- /.card -->
-
             
-            <!-- /.card -->
-
           </div>
           <!-- /.col (left) -->
           <div class="col-md-6">
@@ -125,16 +116,11 @@
                     @enderror
                 </div>
                
-                <!-- /.form group -->
-
-               
               </div>
                 
-              <!-- /.card-body -->
+           
             </div>
            
-            
-            <!-- /.card -->
           </div>
           <!-- /.col (right) -->
         </div>

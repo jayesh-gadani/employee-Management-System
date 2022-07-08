@@ -72,7 +72,8 @@
 
                     </td>
                     <td><a href='{{ route('edit_project',['id' => $project->id]) }}'>Edit</a> | 
-                        <a href='{{ route('delete_project',['id' => $project->id]) }}'>Delete</a>
+                        <a href='{{ route('delete_project',['id' => $project->id]) }}'>Delete</a>|
+                        <a class='smallButton' name='{{$project->title}}' href='' id={{$project->id}}>Assign Project</a>
                     </td>
                        
                   </tr>
@@ -96,7 +97,90 @@
             </div>
             <!-- /.card -->
 
-          
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Assign Project To The user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" id="form" method='post'>
+        @csrf
+          <div class="form-group">
+            Project Title :- <label for="recipient-name" id="projectName"></label><br>
+            <label for="recipient-name" class="col-form-label">Select user To assign project:</label>
+            <select class="form-control" name="userId">
+                <option>--- select user ---</option>
+               
+                    @foreach($users as $user)
+                        <option value='{{$user->id}}'>{{$user->name}}</option>
+                    @endforeach
+               
+            </select>
+          </div>
+          <div class="form-group">
+            
+            
+            <input type="hidden" id="projectId" name='projectId'>
+            
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary"  id="assign_btn">Assign Project</button>
+        <button type="button" class="btn btn-primary" id="assign">click me</button>
+
+
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+        <script>
+        // display a modal (small modal)
+        $(document).ready(function()
+        {
+            $(document).on('click', '.smallButton', function(event) {
+                event.preventDefault();
+            
+                $('#exampleModal').modal("show");
+                var projectName=event.target.name;
+                $('#projectName').text(projectName);
+                var x=event.target.id;
+                $('#projectId').val(x);
+            
+             });
+            $("#assign").click(function(event) {
+               
+                $.ajax({
+                    url : "{{ route('projectAssign') }}",
+                    type: "POST",
+                    data : $('#form').serialize(),
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        //document.write("sucess");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+                 
+                    }
+
+                });
+            });
+
+        });
+
+       </script>
+
             <!-- /.card -->
           </div>
           <!-- /.col -->
@@ -107,5 +191,76 @@
     </section>
     <!-- /.content -->
   
+
+   <div class="container mt-2">
+  
+        <!-- Input field to accept user input -->
+        <textarea id="textarea" rows="4" 
+            cols="50">
+        </textarea><br>
+          
+        <!-- Button to invoke the modal -->
+        <button type="button" 
+            class="btn btn-success btn-sm" 
+            data-toggle="modal" 
+            data-target="#exampleModal1"
+            id="submit">
+            Submit
+        </button>
+  
+        <!-- modal -->
+        <div class="modal fade" id="exampleModal1" 
+            tabindex="-1" 
+            aria-labelledby="exampleModalLabel" 
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" 
+                            id="exampleModalLabel">
+                            Entered Data
+                        </h5>
+                          
+                        <button type="button" 
+                            class="close" 
+                            data-dismiss="modal" 
+                            aria-label="Close">
+  
+                            <span aria-hidden="true">
+                                ×
+                            </span>
+                        </button>
+                    </div>
+  
+                    <div class="modal-body">
+  
+                        <!-- Data passed is displayed
+                            in this part of the 
+                            modal body -->
+                        <p id="modal_body"></p>
+  
+                        <button type="button" 
+                            class="btn btn-warning btn-sm" 
+                            data-toggle="modal"
+                            data-target="#exampleModal">
+                            Proceed
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <script type="text/javascript">
+        $("#submit").click(function () {
+            var text = $("#textarea").val();
+            $("#modal_body").html(text);
+        });
+    </script>
+
+
+
+
+
   
 @endsection

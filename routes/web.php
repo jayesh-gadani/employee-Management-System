@@ -48,5 +48,5 @@ Route::get('/project',[ProjectsController::class,'index'])->name('listing_projec
 Route::any('/add_project',[ProjectsController::class,'addProject'])->name('add_project');
 Route::any('/edit_project/{id}',[ProjectsController::class,'editProject'])->name('edit_project');
 route::any('/delete_project/{id}',[ProjectsController::class,'deleteProject'])->name('delete_project');
-
+route::any('/project_assign',[ProjectsController::class,'projectAssign'])->name('projectAssign');
 Auth::routes();
