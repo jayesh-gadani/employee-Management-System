@@ -18,6 +18,7 @@ class Task extends Migration
             $table->string('title');
             $table->string('description');
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('project_id')->unsigned();
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('status');
@@ -26,6 +27,7 @@ class Task extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             
         });
     }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 Use DateTime;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\AssignProject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -14,6 +15,8 @@ use Mail;
 use Config;
 use Carbon\Carbon;
 use Date;
+use Response;
+use DB;
 
 
 class ProjectsController extends Controller
@@ -159,8 +162,52 @@ class ProjectsController extends Controller
         echo"hi";
         $data= $data = $request->all();
         
-        echo "<pre>"; print_r($data); exit;
+        
+        //echo "<pre>"; print_r($data); exit;
+        $projects = DB::table('assign_projects')
+                ->where('user_id', '=', $data['userId'])
+                ->where('project_id', '=', $data['projectId'])
+                ->get();
+
+                $n=sizeof($projects);
+                if($n>0)
+                {
+                    $request->session()->flash('success', 'This Project is already Assign to this user !');
+
+                    return view('listing_project');
+                }
+                else
+                {
+                    echo "Not found";
+                    $project = new AssignProject();
+                    $project->user_id=$data['userId'];
+                    $project->project_id=$data['projectId'];
+                    $project->status=1;
+                    $id = Auth::user()->id;
+                    $project->created_by=$id;
+                    $project->updated_by=$id;
+                    $project->save();
+                    $request->session()->flash('success', 'Project Assign Sucessfully!');
+
+                    return view('listing_project');
+                   
+                }
+
+
        
+    }
+
+    public function ajaxLoad(Request $request)
+    {
+       
+        $data = $request->all();
+        $project = Project::find($data['id']);
+         $users = User::All(); 
+
+        //return view("loadAjax");
+        //return Response::json(array(view('loadAjax')));
+        return view('project.loadAjax',compact('project','users'));
+
     }
 
     

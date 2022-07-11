@@ -97,50 +97,9 @@
             </div>
             <!-- /.card -->
 
+            <div id="modal_load">
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Assign Project To The user</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="" id="form" method='post'>
-        @csrf
-          <div class="form-group">
-            Project Title :- <label for="recipient-name" id="projectName"></label><br>
-            <label for="recipient-name" class="col-form-label">Select user To assign project:</label>
-            <select class="form-control" name="userId">
-                <option>--- select user ---</option>
-               
-                    @foreach($users as $user)
-                        <option value='{{$user->id}}'>{{$user->name}}</option>
-                    @endforeach
-               
-            </select>
-          </div>
-          <div class="form-group">
-            
-            
-            <input type="hidden" id="projectId" name='projectId'>
-            
-          </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary"  id="assign_btn">Assign Project</button>
-        <button type="button" class="btn btn-primary" id="assign">click me</button>
-
-
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+            </div>
 
 
 
@@ -152,22 +111,41 @@
             $(document).on('click', '.smallButton', function(event) {
                 event.preventDefault();
             
-                $('#exampleModal').modal("show");
+                /*
                 var projectName=event.target.name;
                 $('#projectName').text(projectName);
                 var x=event.target.id;
                 $('#projectId').val(x);
-            
-             });
-            $("#assign").click(function(event) {
+                */
                
+                var x=event.target.id;
                 $.ajax({
+                    url : "{{ route('modalLoad') }}",
+                    type: "GET",
+                    data:{id:x},
+                    success: function(data, textStatus, jqXHR)
+                    {
+
+                        $("#modal_load").html(data);
+                        $('#exampleModal').modal("show");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+                 
+                    }
+                });
+            });
+              $(document).on('click', '#assign_btn', function(event){
+                
+               $.ajax({
                     url : "{{ route('projectAssign') }}",
                     type: "POST",
                     data : $('#form').serialize(),
                     success: function(data, textStatus, jqXHR)
                     {
-                        //document.write("sucess");
+                        $('#exampleModal').modal("hide");
+                        $("#modal_load").html(data);
+
                     },
                     error: function (jqXHR, textStatus, errorThrown)
                     {
