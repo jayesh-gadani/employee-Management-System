@@ -5,6 +5,9 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\ajaxController;
+use App\Http\Controllers\TaskController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,5 +51,16 @@ Route::get('/project',[ProjectsController::class,'index'])->name('listing_projec
 Route::any('/add_project',[ProjectsController::class,'addProject'])->name('add_project');
 Route::any('/edit_project/{id}',[ProjectsController::class,'editProject'])->name('edit_project');
 route::any('/delete_project/{id}',[ProjectsController::class,'deleteProject'])->name('delete_project');
-route::any('/project_assign',[ProjectsController::class,'projectAssign'])->name('projectAssign');
+route::POST('/project_assign',[ProjectsController::class,'projectAssign'])->name('projectAssign');
+
+//Ajax 
+
+route::GET('/modal_load',[ProjectsController::class,'ajaxLoad'])->name('modalLoad');
 Auth::routes();
+
+//Tasks
+Route::get('/tasks',[TaskController::class,'index'])->name('listing_task');
+Route::any('/add_task',[TaskController::class,'addTask'])->name('add_task');
+route::GET('/user_load',[TaskController::class,'userLoad'])->name('userLoad');
+route::GET('/edit_task/{id}',[TaskController::class,'editTask'])->name('editTask');
+route::GET('/delete_task/{id}',[TaskController::class,'deleteTask'])->name('deleteTask');
