@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Mail;
 use Config;
+use Response;
 
 class UserController extends Controller
 {
@@ -30,10 +31,10 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        //$users = User::All();
+        $users = User::paginate(5); 
         
-        $data1 = User::All(); 
-        
-        return view("ViewUser",compact('data1'));
+        return view("ViewUser",compact('users'));
         
     }
 
@@ -50,7 +51,7 @@ class UserController extends Controller
             $data = $request->all();
           
             $validated = $request->validate([
-                'name' => 'required|alpha|max:255',
+                'name' => 'required|max:255',
                 'email' => 'required',
                 'contact' => 'required|digits:10',
                 'address' => 'required',
@@ -96,9 +97,12 @@ class UserController extends Controller
      * @param  [number]  $id      [description]
      * @return [void]           [description]
      */
-    public function delete(Request $request, $id)
+    public function delete(Request $request)
     {
-        $user = User::find($id);
+
+         $data = $request -> all();
+        
+        $user = User::find($data['id']);
 
         if ($user->delete()) {
             $request -> session() -> flash('success', 'User deleted successful!');
@@ -106,7 +110,10 @@ class UserController extends Controller
             $request -> session() -> flash('error', 'Result not deleted!');
         }
 
+return Response::json(array('message' => 'User deleted sucessfully '));
         return redirect() -> route('user');
+        
+        
     }
     
     /**
@@ -125,7 +132,7 @@ class UserController extends Controller
           
             $validated = $request ->validate([
                 
-                'name' => 'required|alpha|max:255',
+                'name' => 'required|max:255',
                 'email' => 'required',
                 'contact' => 'required|digits:10',
                 'address' => 'required',

@@ -1,4 +1,5 @@
 @extends('layout')
+@section('pageTitle','Change password')
 
 @section('content')
 
@@ -8,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Change Password</h1>
+            <h1>Change password</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Change Password</li>
+              <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
+              <li class="breadcrumb-item active"><a href="{{route('change_password')}}">Change password</a></li>
             </ol>
           </div>
         </div>
@@ -49,7 +50,7 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Old Password</label>
+                    <label for="exampleInputEmail1">Old password</label><span class='text-danger'>*</span>
                     <input type="password" name="password" class="form-control" id="exampleInputEmail1" placeholder="Enter old Password" value="{{ old('password')}}">
                     @error('password')
                       <div style="color:red">{{ $message }}</div>
@@ -61,14 +62,14 @@
                     
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">New Password</label>
+                    <label for="exampleInputPassword1">New password</label><span class='text-danger'>*</span>
                     <input type="password" name="newPassword" class="form-control" id="exampleInputPassword1" placeholder="New Password">
                     @error('newPassword')
                       <div style="color:red">{{ $message }}</div>
                     @enderror
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">New Confirm Password</label>
+                    <label for="exampleInputPassword1">New confirm password</label><span class='text-danger'>*</span>
                     <input type="password" name="confirmPassword" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password">
                     @error('confirmPassword')
                       <div style="color:red">{{ $message }}</div>

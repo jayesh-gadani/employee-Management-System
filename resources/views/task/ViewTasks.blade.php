@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('pageTitle','List of task')
 @section('content')
 
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Task of Projects</h1>
+            <h1>Task of projects</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Listing Task</li>
+              <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
+              <li class="breadcrumb-item active"><a href='{{route("listing_task")}}'>Listing task</a></li>
             </ol>
           </div>
         </div>
@@ -39,7 +39,7 @@
             
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Task Listing</h3> <div align='right'><a class="btn btn-primary" href='{{route('add_task')}}'>Add New Task</a></div>
+                <h3 class="card-title">Task Listing</h3> <div align='right'><a class="btn btn-primary" href='{{route('add_task')}}'>Add new task</a></div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -76,8 +76,8 @@
 
                     </td>
                         <td>
-                        <a href='{{ route('editTask',['id' => $task->id]) }}'><i class='far fa-edit'></i></a> 
-                        <a href='{{ route('deleteTask',['id' => $task->id]) }}'><i class='fas fa-trash'></i></a>
+                        <a href='{{ route('editTask',['id' => $task->id]) }}'><i class='far fa-edit' title="Edit Task"></i></a> 
+                        <a href='{{ route('deleteTask',['id' => $task->id]) }}'><i class='fas fa-trash' title="Delete Task"></i></a>
 
                         </td>
                        
@@ -99,6 +99,9 @@
                   </tr>
                   </tfoot>
                 </table>
+                <br>
+
+                {{ $tasks->links('pagination::bootstrap-4') }}
               </div>
               <!-- /.card-body -->
             </div>

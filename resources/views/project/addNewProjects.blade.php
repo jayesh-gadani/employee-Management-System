@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('pageTitle','Add new Project')
 @section('content')
 
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>New Project</h1>
+            <h1>New project</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Project</li>
+              <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
+              <li class="breadcrumb-item active"><a href="{{route('add_project')}}">Project</a></li>
             </ol>
           </div>
         </div>
@@ -49,7 +49,7 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Title</label>
+                    <label for="exampleInputEmail1">Title</label><span class='text-danger'>*</span>
                     <input type="text" name="title" class="form-control" id="exampleInputEmail1" placeholder="Enter Title"  value="{{ old('title') ? old('title') : $project->title}}">
                     @error('title')
                       <div style="color:red">{{ $message }}</div>
@@ -57,7 +57,7 @@
                   </div>
           
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Description</label>
+                    <label for="exampleInputEmail1">Description</label><span class='text-danger'>*</span>
                     <textarea  name="description" class="form-control" id="exampleInputEmail1">{{ old('description') ? old('description') : $project->description}}</textarea>
                     @error('description')
                       <div style="color:red">{{ $message }}</div>
@@ -74,10 +74,10 @@
               <div class="card-body">
                 <!-- Date dd/mm/yyyy -->
                 <div class="form-group">
-                  <label>Date:</label>
+                  <label>Date:</label><span class='text-danger'>*</span>
 
                   <div class="input-group date"  data-target-input="nearest">
-                        <input type="date" name="startDate" class="form-control" value="{{old('startDate') ? old('startDate') : $project->start_date}}}}" data-target="#reservationdate" />
+                        <input type="date" name="startDate" class="form-control" value="{{old('startDate') ? old('startDate') : $project->start_date}}" data-target="#reservationdate" />
                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -103,9 +103,9 @@
               <div class="card-body">
                 <!-- Date -->
                 <div class="form-group">
-                  <label>Date:</label>
+                  <label>Date:</label><span class='text-danger'>*</span>
                     <div class="input-group date" data-target-input="nearest">
-                        <input type="date" name="endDate" class="form-control" value="{{old("endDate")}}">
+                        <input type="date" name="endDate" class="form-control" value="{{old('endDate') ? old('endDate') : $project->end_date}}">
                         
                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -130,6 +130,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
+                  <a href='{{route('listing_project')}}' class="btn btn-primary">cancel</a>
                 </div>
               </form>
             </div>

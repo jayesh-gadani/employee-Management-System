@@ -42,7 +42,7 @@ Route::any('reset_password',[MailController::class,'resetPassword'])->name('rese
 Route::get('/user',[UserController::class,'index'])->name('user');
 Route::any('add',[UserController::class,'add'])->name('add');
 Route::any('edit/{id}',[UserController::class,'edit'])->name('edit');
-Route::any('delete/{id}',[UserController::class,'delete'])->name('delete');
+Route::any('delete',[UserController::class,'delete'])->name('delete');
 Route::any('parmittion/{id}',[UserController::class,'parmittion'])->name('parmittion');
 
 //project
@@ -50,7 +50,7 @@ Route::any('parmittion/{id}',[UserController::class,'parmittion'])->name('parmit
 Route::get('/project',[ProjectsController::class,'index'])->name('listing_project');
 Route::any('/add_project',[ProjectsController::class,'addProject'])->name('add_project');
 Route::any('/edit_project/{id}',[ProjectsController::class,'editProject'])->name('edit_project');
-route::any('/delete_project/{id}',[ProjectsController::class,'deleteProject'])->name('delete_project');
+route::any('/delete_project',[ProjectsController::class,'deleteProject'])->name('delete_project');
 route::POST('/project_assign',[ProjectsController::class,'projectAssign'])->name('projectAssign');
 
 //Ajax 

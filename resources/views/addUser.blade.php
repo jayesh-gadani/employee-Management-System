@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('pageTitle','New User Registration')
 @section('content')
 
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>New User Registration</h1>
+            <h1>New user registration</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Registration</li>
+              <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
+              <li class="breadcrumb-item active"><a href='add'>Registration</a></li>
             </ol>
           </div>
         </div>
@@ -40,7 +40,7 @@
                 </div>
               @endif
               <div class="card-header">
-                <h3 class="card-title">New User<small>  Registration Form</small></h3>
+                <h3 class="card-title">New user<small>  registration form</small></h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -49,22 +49,22 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Name</label>
+                    <label for="exampleInputEmail1">Name</label><span class='text-danger'>*</span>
                     <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="Enter Name"  value="{{ old('name') ? old('name') : $user->name}}">
                     @error('name')
                       <div style="color:red">{{ $message }}</div>
                     @enderror
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Email</label>
+                    <label for="exampleInputEmail1">Email</label><span class='text-danger'>*</span>
                     <input type="text" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Email" value="{{ old('email') ? old('email') : $user->email}}">
-                    @error('name')
+                    @error('email')
                       <div style="color:red">{{ $message }}</div>
                     @enderror
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Contact</label>
+                    <label for="exampleInputEmail1">Contact</label><span class='text-danger'>*</span>
                     <input type="text" name="contact" class="form-control" id="exampleInputEmail1" placeholder="Enter Contact" value="{{ old('contact') ? old('contact') : $user->contact}}">
                     @error('contact')
                       <div style="color:red">{{ $message }}</div>
@@ -72,7 +72,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Address</label>
+                    <label for="exampleInputEmail1">Address</label><span class='text-danger'>*</span>
                     <textarea  name="address" class="form-control" id="exampleInputEmail1">{{ old('address') ? old('address') : $user->address}}</textarea>
                     @error('address')
                       <div style="color:red">{{ $message }}</div>
@@ -80,9 +80,9 @@
                   </div>
                   <div class="form-group">
 
-                    <label for="exampleInputEmail1">Role</label>
+                    <label for="exampleInputEmail1">Role</label><span class='text-danger'>*</span>
                     <select  name="role" class="form-control" id="exampleInputEmail1">
-                      <option>--- Select Role ---</option>
+                      <option>Select Role</option>
                      
                       @foreach(config('global.roles') as $key => $value)
                                 @if(isset($user->role) && $key==$user->role)
@@ -99,9 +99,9 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Position</label>
+                    <label for="exampleInputEmail1">Position</label><span class='text-danger'>*</span>
                     <select  name="position" class="form-control" id="exampleInputEmail1">
-                      <option>--- Select Position ---</option>
+                      <option>Select Position</option>
                        @foreach(config('global.positions') as $key => $value)
                                 @if(isset($user->position) && $key==$user->position)
                                     <option value='{{$key}}' selected>{{$value}}</option>
@@ -115,19 +115,11 @@
                       <div style="color:red">{{ $message }}</div>
                     @enderror
                   </div>
-
-
-
-
-
-                  
-                  
-
-                  
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
+                   <a href='{{route('user')}}' class="btn btn-primary">cancel</a>
                 </div>
               </form>
             </div>

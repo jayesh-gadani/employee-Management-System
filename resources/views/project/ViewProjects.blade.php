@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('pageTitle','List of project')
 @section('content')
 
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Listing Projects</h1>
+            <h1>Listing projects</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Listing Project</li>
+              <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
+              <li class="breadcrumb-item active"><a href="{{route('listing_project')}}">List project</a></li>
             </ol>
           </div>
         </div>
@@ -39,7 +39,7 @@
             
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">User Listing</h3> <div align='right'><a class="btn btn-primary" href='{{route('add_project')}}'>Add New Project</a></div>
+                <h3 class="card-title">User Listing</h3> <div align='right'><a class="btn btn-primary" href='{{route('add_project')}}'>Add new project</a></div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -71,9 +71,14 @@
 
 
                     </td>
-                    <td><a href='{{ route('edit_project',['id' => $project->id]) }}'>Edit</a> | 
-                        <a href='{{ route('delete_project',['id' => $project->id]) }}'>Delete</a>|
+                    <td><a href='{{ route('edit_project',['id' => $project->id]) }}'><i class='far fa-edit' title='Edit Project'></i></a>
+                     
+                        <a href='{{ route('delete_project',['id' => $project->id]) }}'><i class='fas fa-trash' title="Delete Project"></i></a>
+
                         <a class='smallButton' name='{{$project->title}}' href='' id={{$project->id}}>Assign Project</a>
+
+                        <a class="confirm" id='{{$project->id}}'><i class='fas fa-trash' title="Delete User"></i></a> 
+
                     </td>
                        
                   </tr>
@@ -92,6 +97,10 @@
                   </tr>
                   </tfoot>
                 </table>
+                <br>
+                
+                 {{ $projects->links('pagination::bootstrap-4') }}
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -144,7 +153,8 @@
                     success: function(data, textStatus, jqXHR)
                     {
                         $('#exampleModal').modal("hide");
-                        $("#modal_load").html(data);
+                        $("#modal_load").html(data['message']);
+                        location.reload(); 
 
                     },
                     error: function (jqXHR, textStatus, errorThrown)
@@ -154,6 +164,39 @@
 
                 });
             });
+
+               $(document).on('click', '.confirm', function(event) {
+                event.preventDefault();
+            
+               
+               
+                var id=event.target.id;
+                alert(id);
+                var result=confirm("Are you sure you want to delete Project ?");
+                if (result) {
+                
+                 $.ajax({
+                    url : "{{ route('delete_project') }}",
+                    type: "GET",
+                    data:{id:id},
+                    success: function(data, textStatus, jqXHR)
+                    {
+
+                         location.reload(); 
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+                 
+                    }
+                });
+
+               }
+               else {
+                location.reload();
+
+               }
+
+            }); 
 
         });
 
@@ -169,75 +212,6 @@
     </section>
     <!-- /.content -->
   
-
-   <div class="container mt-2">
-  
-        <!-- Input field to accept user input -->
-        <textarea id="textarea" rows="4" 
-            cols="50">
-        </textarea><br>
-          
-        <!-- Button to invoke the modal -->
-        <button type="button" 
-            class="btn btn-success btn-sm" 
-            data-toggle="modal" 
-            data-target="#exampleModal1"
-            id="submit">
-            Submit
-        </button>
-  
-        <!-- modal -->
-        <div class="modal fade" id="exampleModal1" 
-            tabindex="-1" 
-            aria-labelledby="exampleModalLabel" 
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" 
-                            id="exampleModalLabel">
-                            Entered Data
-                        </h5>
-                          
-                        <button type="button" 
-                            class="close" 
-                            data-dismiss="modal" 
-                            aria-label="Close">
-  
-                            <span aria-hidden="true">
-                                ×
-                            </span>
-                        </button>
-                    </div>
-  
-                    <div class="modal-body">
-  
-                        <!-- Data passed is displayed
-                            in this part of the 
-                            modal body -->
-                        <p id="modal_body"></p>
-  
-                        <button type="button" 
-                            class="btn btn-warning btn-sm" 
-                            data-toggle="modal"
-                            data-target="#exampleModal">
-                            Proceed
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  
-    <script type="text/javascript">
-        $("#submit").click(function () {
-            var text = $("#textarea").val();
-            $("#modal_body").html(text);
-        });
-    </script>
-
-
-
 
 
   

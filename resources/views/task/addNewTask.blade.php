@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('pageTitle','Add new Task')
 @section('content')
 
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>New Project</h1>
+            <h1>New task</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Project</li>
+              <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
+              <li class="breadcrumb-item active"><a href='{{route('add_task')}}'>Task</a></li>
             </ol>
           </div>
         </div>
@@ -49,7 +49,7 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Title</label>
+                    <label for="exampleInputEmail1">Title</label><span class='text-danger'>*</span>
                     <input type="text" name="title" class="form-control" id="exampleInputEmail1" placeholder="Enter Title"  value="{{ old('title') ? old('title') : $tasks->title}}">
                     @error('title')
                       <div style="color:red">{{ $message }}</div>
@@ -57,7 +57,7 @@
                   </div>
           
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Description</label>
+                    <label for="exampleInputEmail1">Description</label><span class='text-danger'>*</span>
                     <textarea  name="description" class="form-control" id="exampleInputEmail1">{{ old('description') ? old('description') : $tasks->description}}</textarea>
                     @error('description')
                       <div style="color:red">{{ $message }}</div>
@@ -66,7 +66,7 @@
 
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Select Project</label>
+                    <label for="exampleInputEmail1">Select Project</label><span class='text-danger'>*</span>
                     <select class="form-control" name="projectId" id="project">
                			<option>--- select user ---</option>
                			@foreach($projects as $project)
@@ -81,7 +81,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Selct User</label>
+                    <label for="exampleInputEmail1">Selct User</label><span class='text-danger'>*</span>
                     <div id="user_load">
 	                    <select class="form-control" name="userId">
 	               			<option>--- select user ---</option>
@@ -102,7 +102,7 @@
 			              <div class="card-body">
 			                <!-- Date dd/mm/yyyy -->
 			                <div class="form-group">
-			                  <label>Date:</label>
+			                  <label>Date:</label><span class='text-danger'>*</span>
 
 			                  <div class="input-group date"  data-target-input="nearest">
 			                        <input type="date" name="startDate" class="form-control" value="{{old('startDate') ? old('startDate') : $tasks->start_date}}" data-target="#reservationdate" />
@@ -131,7 +131,7 @@
 		              <div class="card-body">
 		                <!-- Date -->
 		                <div class="form-group">
-		                  <label>Date:</label>
+		                  <label>Date:</label><span class='text-danger'>*</span>
 		                    <div class="input-group date" data-target-input="nearest">
 		                        <input type="date" name="endDate" class="form-control"value="{{old('endDate') ? old('endDate') : $tasks->end_date}}>
 		                        
@@ -158,6 +158,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
+                  <a href='{{route('listing_task')}}' class="btn btn-primary">cancel</a>
                 </div>
               </form>
             </div>

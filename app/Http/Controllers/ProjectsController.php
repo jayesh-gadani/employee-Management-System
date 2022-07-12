@@ -39,7 +39,8 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
         
-        $projects = Project::All(); 
+        //$projects = Project::All();
+        $projects = Project::paginate(5);
         $users = User::All();  
         return view("project.ViewProjects",compact('projects','users'));
     	
@@ -97,13 +98,16 @@ class ProjectsController extends Controller
      * @param  [number]  $id      [description]
      * @return [void]           [description]
      */
-    public function deleteProject(Request $request, $id)
+    public function deleteProject(Request $request)
     {
-        $project = Project::find($id);
+        $data = $request -> all();
+        
+       
+        $project = Project::find($data['id']);
+
         if ($project -> delete()) {
             $request -> session() -> flash('success','Project is Sucessfully deleted');
-        }
-        else{
+        } else {
             $request -> session() -> flash('error','Error in project Deeleting');
            
         }
@@ -159,13 +163,15 @@ class ProjectsController extends Controller
 
     public function projectAssign(Request $request)
     {
-        echo"hi";
-        $data= $data = $request->all();
         
-        
-        //echo "<pre>"; print_r($data); exit;
-        $projects = DB::table('assign_projects')
-                ->where('user_id', '=', $data['userId'])
+        $data = $request->all();
+        $users_id=$data['userId'];
+
+        foreach($users_id as $user_id)
+        {
+
+            $projects = DB::table('assign_projects')
+                ->where('user_id', '=', $user_id)
                 ->where('project_id', '=', $data['projectId'])
                 ->get();
 
@@ -174,13 +180,12 @@ class ProjectsController extends Controller
                 {
                     $request->session()->flash('success', 'This Project is already Assign to this user !');
 
-                    return view('listing_project');
+                    
                 }
                 else
                 {
-                    echo "Not found";
                     $project = new AssignProject();
-                    $project->user_id=$data['userId'];
+                    $project->user_id=$user_id;
                     $project->project_id=$data['projectId'];
                     $project->status=1;
                     $id = Auth::user()->id;
@@ -189,18 +194,21 @@ class ProjectsController extends Controller
                     $project->save();
                     $request->session()->flash('success', 'Project Assign Sucessfully!');
 
-                    return view('listing_project');
                    
                 }
+                
 
+        }
+        return Response::json(array('message' => 'Project assigned sucessfully '));
 
-       
+       ///return view('listing_project');
     }
 
     public function ajaxLoad(Request $request)
     {
        
         $data = $request->all();
+      
         $project = Project::find($data['id']);
          $users = User::All(); 
 

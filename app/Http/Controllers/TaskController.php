@@ -20,7 +20,8 @@ class TaskController extends BaseController
  
     public function index()
     {
-        $tasks = Task::All(); 
+        //$tasks = Task::All();
+        $tasks = Task::paginate(5); 
         return view("task.ViewTasks",compact('tasks'));
     }
  
