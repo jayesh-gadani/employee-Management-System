@@ -40,7 +40,7 @@ class MailController extends Controller
         $data = $request->All();
 
         $validated = $request->validate([
-                'email' => 'required|string|max:255',       
+            'email' => 'required|string|max:255',       
         ]);
 
        
@@ -48,9 +48,12 @@ class MailController extends Controller
         if ($user) {
             $token = Str::random(60);
        
-            $send = Mail::send('email.forgotPassword', ['data' => $data,'token'=>$token], function($message) use ($data) {
-            $message -> to($data['email']) -> subject('Forgot Password');
-            $message -> from('jayesh.karavyasolutions@gmail.com','jayesh Gadani');
+            $send = Mail::send('email.forgotPassword', [
+                'data' => $data,
+                'token'=>$token
+            ], function($message) use ($data) {
+                $message -> to($data['email']) -> subject('Forgot Password');
+                $message -> from('jayesh.karavyasolutions@gmail.com','jayesh Gadani');
             });
        
             $date =Carbon::now();

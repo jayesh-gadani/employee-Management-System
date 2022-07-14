@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Mail;
 use Illuminate\Support\Str;
+use Config;
 
 class RegisterController extends Controller
 {
@@ -68,9 +69,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        
             $token = Str::random(60);
+            $user = new User();
+            $result=$user->saveData($data, $token);
        
-            $user = User::create([
+           /* $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'contact'=> $data['contact'],
@@ -80,21 +84,31 @@ class RegisterController extends Controller
                 'position'=>'Employee',
                 'status' => '0',
                 'token' => $token    
-            ]);
+            ]);*/
         
-       //Mail send to the user for email varification
-        $send = Mail::send('demo', ['data' => $data,'token'=>$token], function($message) use ($data) {
-            $message -> to($data['email']) -> subject('Laravel Basic Testing Mail');
-            $message -> from('jayesh.karavyasolutions@gmail.com','jayesh Gadani');
-        });
+        if($result == 1) {
+
+        //Mail send to the user for email varification
+            $send = Mail::send('demo', [
+                'data' => $data,
+                'token' => $token], function($message) use ($data) {
+                 $message -> to($data['email']) -> subject('Laravel Basic Testing Mail');
+                 $message -> from('jayesh.karavyasolutions@gmail.com','Jayesh Gadani');
+            });
 
         //Mail send to the Hr and Admin for Registration approval
-
-        $emails = array("gadanijayesh@gmail.com", "parth.parmar12007@gmail.com"); 
-        $send = Mail::send('email.registration_approve', ['data' => $data,'token'=>$token], function($message) use ($emails,$data) {
-            $message -> to($emails)->subject('Approve new Registered user');
-            $message -> from('jayesh.karavyasolutions@gmail.com','jayesh Gadani');
+            $emails = array(config('hr_email'),config('admin_email')); 
+            $send = Mail::send('email.registration_approve', ['data' => $data,'token'=>$token], function($message) use ($emails,$data) {
+                $message -> to($emails)->subject('Approve new Registered user');
+                $message -> from('jayesh.karavyasolutions@gmail.com','jayesh Gadani');
         });
+             
+
+        } else {
+            
+        }
+
+       
         return $user;
     }
 }

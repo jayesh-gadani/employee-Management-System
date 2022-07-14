@@ -35,4 +35,14 @@ class Task extends Model
     {
         return $this->hasOne(Project::class, 'id', 'project_id');
     }
+    /**
+     * [displayAll function is used display all task]
+     * @return object  it return all task
+     */
+    public function displayAll()
+    {
+         $iteams=config('paginate');
+        $tasks = Task::paginate($iteams); 
+        return($tasks);
+    }
 }

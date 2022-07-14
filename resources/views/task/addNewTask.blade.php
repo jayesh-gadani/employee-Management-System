@@ -66,12 +66,15 @@
 
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Select Project</label><span class='text-danger'>*</span>
+                    <label for="exampleInputEmail1">Select project</label><span class='text-danger'>*</span>
                     <select class="form-control" name="projectId" id="project">
-               			<option>--- select user ---</option>
+               			<option value="">select Project </option>
                			@foreach($projects as $project)
-
-		                    <option value='{{$project->id}}'>{{$project->title}}</option>
+                        @if(isset($tasks->project_id) and $project->id==$tasks->project_id)
+		                      <option value='{{$project->id}}' selected>{{$project->title}}</option>
+                        @else
+                            <option value='{{$project->id}}'>{{$project->title}}</option>
+                        @endif   
 		                @endforeach
 		               
             		</select>
@@ -81,11 +84,12 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Selct User</label><span class='text-danger'>*</span>
+                    <label for="exampleInputEmail1">Selct user</label><span class='text-danger'>*</span>
                     <div id="user_load">
 	                    <select class="form-control" name="userId">
-	               			<option>--- select user ---</option>
+	               			<option value="">select user</option>
 	               		</select>
+
             		</div>
                     @error('userId')
                       <div style="color:red">{{ $message }}</div>

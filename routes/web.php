@@ -62,5 +62,5 @@ Auth::routes();
 Route::get('/tasks',[TaskController::class,'index'])->name('listing_task');
 Route::any('/add_task',[TaskController::class,'addTask'])->name('add_task');
 route::GET('/user_load',[TaskController::class,'userLoad'])->name('userLoad');
-route::GET('/edit_task/{id}',[TaskController::class,'editTask'])->name('editTask');
-route::GET('/delete_task/{id}',[TaskController::class,'deleteTask'])->name('deleteTask');
+route::any('/edit_task/{id}',[TaskController::class,'editTask'])->name('editTask');
+route::GET('/delete_task',[TaskController::class,'deleteTask'])->name('deleteTask');
