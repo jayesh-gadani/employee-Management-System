@@ -32,7 +32,7 @@
             <input type="hidden" id="projectId" name='projectId' value="{{ $project['id']}}">
             
           </div>
-        
+        <div id="message" class='text-danger'></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

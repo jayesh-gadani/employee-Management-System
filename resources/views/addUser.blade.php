@@ -81,8 +81,8 @@
                   <div class="form-group">
 
                     <label for="exampleInputEmail1">Role</label><span class='text-danger'>*</span>
-                    <select  name="role" class="form-control" id="exampleInputEmail1">
-                      <option>Select Role</option>
+                    <select  name="role" class="form-control" id="exampleInputEmail1"> 
+                      <option value="">Select Role</option>
                      
                       @foreach(config('global.roles') as $key => $value)
                                 @if(isset($user->role) && $key==$user->role)
@@ -101,7 +101,7 @@
                   <div class="form-group">
                     <label for="exampleInputEmail1">Position</label><span class='text-danger'>*</span>
                     <select  name="position" class="form-control" id="exampleInputEmail1">
-                      <option>Select Position</option>
+                      <option value="">Select Position</option>
                        @foreach(config('global.positions') as $key => $value)
                                 @if(isset($user->position) && $key==$user->position)
                                     <option value='{{$key}}' selected>{{$value}}</option>

@@ -71,14 +71,13 @@
 
 
                     </td>
-                    <td><a href='{{ route('edit_project',['id' => $project->id]) }}'><i class='far fa-edit' title='Edit Project'></i></a>
+                    <td>
+
+                      <a href="{{ route('edit_project',['id' => $project->id]) }}"><i class='far fa-edit' title='Edit Project'></i></a>
                      
-                        <a href='{{ route('delete_project',['id' => $project->id]) }}'><i class='fas fa-trash' title="Delete Project"></i></a>
+                       <a class='confirm' data-title="{{$project->title}}" href='' data-id="{{$project->id}}"><i class='fas fa-trash' title="Delete Project"></i></a>
 
-                        <a class='smallButton' name='{{$project->title}}' href='' id={{$project->id}}>Assign Project</a>
-
-                        <a class="confirm" id='{{$project->id}}'><i class='fas fa-trash' title="Delete User"></i></a> 
-
+                      <a class='smallButton' name="{{$project->title}}" href='' id="{{$project->id}}">Assign Project</a>
                     </td>
                        
                   </tr>
@@ -152,9 +151,16 @@
                     data : $('#form').serialize(),
                     success: function(data, textStatus, jqXHR)
                     {
+                      if(data['status']=="failed")
+                      {
+                        $("#message").html(data['message']);
+                      }
+                      else
+                      {
                         $('#exampleModal').modal("hide");
                         $("#modal_load").html(data['message']);
                         location.reload(); 
+                      }
 
                     },
                     error: function (jqXHR, textStatus, errorThrown)
@@ -167,12 +173,10 @@
 
                $(document).on('click', '.confirm', function(event) {
                 event.preventDefault();
-            
-               
-               
-                var id=event.target.id;
-                alert(id);
-                var result=confirm("Are you sure you want to delete Project ?");
+                var id=$(this).data('id');
+                var title=$(this).data('title');
+                var result=confirm("Are you sure you want to delete"+title+" Project ?");
+
                 if (result) {
                 
                  $.ajax({
@@ -188,7 +192,7 @@
                     {
                  
                     }
-                });
+                   });
 
                }
                else {

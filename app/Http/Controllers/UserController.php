@@ -7,6 +7,7 @@ Use DateTime;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Exceptions;
 use Illuminate\Support\Str;
 use Mail;
 use Config;
@@ -31,11 +32,10 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        //$users = User::All();
-        $users = User::paginate(5); 
-        
-        return view("ViewUser",compact('users'));
-        
+        $users = new User();
+        $users= $users->displayAll();
+     
+        return view("ViewUser", compact('users'));   
     }
 
     /**
@@ -55,28 +55,15 @@ class UserController extends Controller
                 'email' => 'required',
                 'contact' => 'required|digits:10',
                 'address' => 'required',
+                'role' => 'required',
+                'position' => 'required',
             ]);
 
-
-            $id = Auth::user()->id;
-            $password = Str::random(8);
-            $emails = $data["email"];
-
-            $user = new User();
-            $user->name = $data["name"];
-            $user->email = $data["email"];
-            $user->contact = $data["contact"];
-            $user->address = $data["address"]; 
-            $user->password = Hash::make($password);
-            $user->role = $data["role"];
-            $user->position = $data["position"];
-
-            $user->status = 1;
-            $user->created_by = $id;
-            $user->updated_by = $id;
-            $user->save();
-           // $emails = array("gadanijayesh@gmail.com", "parth.parmar12007@gmail.com");  
-
+           $user=new user();
+           $password = Str::random(8);
+           $emails = $data["email"];
+           $result=$user->addUser($data,$password);
+          
             $send = Mail::send('email_password', ['data' => $data, 'password' => $password], function($message) use ($emails, $data) {
                 $message->to($emails)->subject('Find our your temporary password');
                 $message->from('jayesh.karavyasolutions@gmail.com','jayesh Gadani');
@@ -100,20 +87,18 @@ class UserController extends Controller
     public function delete(Request $request)
     {
 
-         $data = $request -> all();
-        
-        $user = User::find($data['id']);
-
-        if ($user->delete()) {
+        $data = $request -> all();
+        $user = new User();
+        $result = $user->deleteUser($data);
+        if ($result == 1) {
             $request -> session() -> flash('success', 'User deleted successful!');
         } else {
             $request -> session() -> flash('error', 'Result not deleted!');
         }
 
-return Response::json(array('message' => 'User deleted sucessfully '));
-        return redirect() -> route('user');
-        
-        
+        return Response::json(array('message' => 'User deleted sucessfully '));
+        return redirect()->route('user');
+
     }
     
     /**
@@ -125,6 +110,7 @@ return Response::json(array('message' => 'User deleted sucessfully '));
     public function edit(Request $request, $id)
     {
         $user = User::find($id);
+        
         if ($request -> isMethod('POST')) {
             
             
@@ -136,39 +122,32 @@ return Response::json(array('message' => 'User deleted sucessfully '));
                 'email' => 'required',
                 'contact' => 'required|digits:10',
                 'address' => 'required',
+                'role' => 'required',
+                'position' => 'required',
 
             ]);
            
-            $user->name = $data["name"];
-            $user->email = $data["email"];
-            $user->contact = $data["contact"];
-            $user->address = $data["address"]; 
-            $user->role = $data["role"];
-            $user->position = $data["position"];
-          
-            $user->save();
-            $request -> session() -> flash('success', 'User updated Sucessfully!');
-            return redirect() -> route('user');
+            $user = new User();
+            $result=$user->editUser($data, $id);
+            if($result) {
+                $request -> session() -> flash('success', 'User updated Sucessfully!');
+                return redirect() -> route('user');    
+            }
+           
+            
         }
           
         return view("addUser", compact('user')); 
     }
 
-    public function parmittion(Request $request, $id)
+    public function parmission(Request $request, $id)
     {
-        $user = User::find($id);
-        $status = $user['status'];
-        $message = "";
-        if ($status == 0) {
-            $user->status = '1';
+        $user=new User();
+        $result=$user->parmittiion($id);         
+        if($result)
             $message="Parmission Approval!";
-        } else {
-            $user->status = '0';
-            $message="Parmission Dis Approval!";
-        }   
-        
-        $user->save();         
-        
+        else
+             $message="Parmission Dis Approval!";
         $request -> session() -> flash('success', $message);
         return redirect() -> route('user');
 

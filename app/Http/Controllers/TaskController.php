@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\AssignProject;
+use Response;
+use Config;
 
 class TaskController extends BaseController
 {
@@ -21,7 +23,8 @@ class TaskController extends BaseController
     public function index()
     {
         //$tasks = Task::All();
-        $tasks = Task::paginate(5); 
+        $tasks=new Task();
+        $tasks = $tasks->displayAll(); 
         return view("task.ViewTasks",compact('tasks'));
     }
  
@@ -37,7 +40,9 @@ class TaskController extends BaseController
                 'title' => 'required',
                 'description' => 'required',
                 'startDate' => 'required',
-                'endDate' => 'required|after:startDate'
+                'endDate' => 'required|after:startDate',
+                'userId' => 'required',
+                'projectId' => 'required',
             ];
             
             $validator = Validator::make($data, $rules);
@@ -48,7 +53,6 @@ class TaskController extends BaseController
                         ->withInput();
              }
             $id = Auth::user()->id;
-            //echo "<pre>"; print_r($data); exit;
             $tasks->title = $data['title'];
             $tasks->description = $data['description'];
             $tasks->user_id = $data['userId'];
@@ -81,10 +85,11 @@ class TaskController extends BaseController
        
 
     }
-    public function deleteTask(Request $request, $id)
+    public function deleteTask(Request $request)
     {
+        $data = $request -> all();
 
-        $task = Task::find($id);
+        $task = Task::find($data['id']);
          if ($task -> delete()) {
             $request -> session() -> flash('success','Task is Sucessfully deleted');
         }
@@ -94,5 +99,45 @@ class TaskController extends BaseController
         }
         return redirect()->route('listing_task');
     }
+    public function editTask(Request $request, $id)
+    {
+        
+        //$tasks = new Task();
+        $tasks = Task::find($id); 
+        $projects=Project::All();
+        if ($request -> isMethod('POST')) {
+            $data = $request->all();
+
+            $rules =[
+                'title' => 'required',
+                'description' => 'required',
+                'startDate' => 'required',
+                'endDate' => 'required|after:startDate',
+                'userId' => 'required',
+                'projectId' => 'required',
+            ];
+            
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) {
+                return redirect('add_task')
+                        ->withErrors($validator)
+                        ->withInput();
+             }
+            $id = Auth::user()->id;
+            //echo "<pre>"; print_r($data); exit;
+            $tasks->title = $data['title'];
+            $tasks->description = $data['description'];
+            $tasks->user_id = $data['userId'];
+            $tasks->project_id = $data['projectId'];
+            $tasks->start_date = $data['startDate'];
+            $tasks->end_date = $data['endDate'];
+            $tasks->save();
+            $request->session()->flash('success', 'Task Updated Sucessfully!');
+
+            return redirect()->route('listing_task');           
+         }
+          return view("task.addNewTask", compact('tasks','projects')); 
+     }
 
 }

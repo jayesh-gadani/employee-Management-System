@@ -40,11 +40,9 @@ class ProjectsController extends Controller
     {
         
         //$projects = Project::All();
-        $projects = Project::paginate(5);
-        $users = User::All();  
-        return view("project.ViewProjects",compact('projects','users'));
-    	
-        
+       $projects=new Project();
+       $projects=$projects->displayAll();
+        return view("project.ViewProjects",compact('projects'));
     }
 
     /**
@@ -70,21 +68,15 @@ class ProjectsController extends Controller
                 return redirect('add_project')
                         ->withErrors($validator)
                         ->withInput();
-             }
+            }
+            $result = $project->addProject($data);
+            if ($result) {
+                $request->session()->flash('success', 'Project Added Sucessfully!');
+            } else {
+                $request->session()->flash('error', 'Error in inserting Project!');
 
-          
-            $id = Auth::user()->id;
-            $project->title=$data['title'];
-            $project->description=$data['description'];
-            $project->start_date=$data['startDate'];
-            $project->end_date=$data['endDate'];
-            $project->status=1;
-            $project->created_by=$id;
-            $project->updated_by=$id;
-            $project->save();
-            $request->session()->flash('success', 'Project Added Sucessfully!');
-
-            return redirect()->route('listing_project');    
+            } 
+            return redirect()->route('listing_project'); 
 
         }
       
@@ -102,15 +94,16 @@ class ProjectsController extends Controller
     {
         $data = $request -> all();
         
+       $project=new Project();
+       $result=$project->deleteProject($data['id']);
        
-        $project = Project::find($data['id']);
-
-        if ($project -> delete()) {
+        if ($result) {
             $request -> session() -> flash('success','Project is Sucessfully deleted');
         } else {
             $request -> session() -> flash('error','Error in project Deeleting');
            
         }
+        return Response::json(array('status' => 'success', 'message' => 'Project assigned sucessfully '));
         return redirect()->route('listing_project');
 
     }
@@ -142,15 +135,12 @@ class ProjectsController extends Controller
                         ->withInput();
              }
 
-          
-            $id = Auth::user()->id;
-            $project->title=$data['title'];
-            $project->description=$data['description'];
-            $project->start_date=$data['startDate'];
-            $project->end_date=$data['endDate'];
-            $project->updated_by=$id;
-            $project->save();
-            $request->session()->flash('success', 'Project Sucessfully Edited!');
+            $project = new Project();
+            $result = $project->editProject($data, $id);
+           if ($result)
+                $request->session()->flash('success', 'Project Sucessfully Edited!');
+            else
+                $request->session()->flash('error', 'Failes in Project Edited!');
 
             return redirect()->route('listing_project');    
 
@@ -165,41 +155,28 @@ class ProjectsController extends Controller
     {
         
         $data = $request->all();
-        $users_id=$data['userId'];
 
-        foreach($users_id as $user_id)
+        
+         $users_id=$request->get('userId');
+        if($users_id==null)
         {
-
-            $projects = DB::table('assign_projects')
-                ->where('user_id', '=', $user_id)
-                ->where('project_id', '=', $data['projectId'])
-                ->get();
-
-                $n=sizeof($projects);
-                if($n>0)
-                {
-                    $request->session()->flash('success', 'This Project is already Assign to this user !');
-
-                    
-                }
-                else
-                {
-                    $project = new AssignProject();
-                    $project->user_id=$user_id;
-                    $project->project_id=$data['projectId'];
-                    $project->status=1;
-                    $id = Auth::user()->id;
-                    $project->created_by=$id;
-                    $project->updated_by=$id;
-                    $project->save();
-                    $request->session()->flash('success', 'Project Assign Sucessfully!');
-
-                   
-                }
-                
-
+            return Response::json(array('status' => 'failed', 'message' => 'Please select users'));
         }
-        return Response::json(array('message' => 'Project assigned sucessfully '));
+        $users_id=$data['userId'];
+        $project=new Project();
+        $result=$project->assignProject($users_id, $data['projectId']);
+
+        if($result==true) {
+            $request -> session() -> flash('success', 'Sucessfully Assigned Project!');
+            return Response::json(array('status' => 'success', 'message' => 'Project assigned sucessfully '));
+        }
+        else if($result==false) {
+            $request -> session() -> flash('Error', 'Failed to assigned Project!');
+            return Response::json(array('status' => 'error', 'message' => 'Failed to assigned Project'));
+        }
+        else
+            return Response::json(array('status' => '0', 'message' => 'Project is already assigned to the user'));
+        
 
        ///return view('listing_project');
     }
@@ -208,12 +185,12 @@ class ProjectsController extends Controller
     {
        
         $data = $request->all();
-      
-        $project = Project::find($data['id']);
-         $users = User::All(); 
+        $id=$data['id'];
 
-        //return view("loadAjax");
-        //return Response::json(array(view('loadAjax')));
+        $project = new Project();
+        $array= $project->modalLoad($id);
+        $project=$array['project'];
+        $users=$array['users'];
         return view('project.loadAjax',compact('project','users'));
 
     }
