@@ -1,5 +1,5 @@
-@extends('layouts.app')
-
+@extends('auth.layout')
+@section('pageTitle','Forgot Password')
 @section('content')
 {{$token}}
 <div class="container">

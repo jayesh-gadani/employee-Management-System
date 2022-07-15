@@ -36,13 +36,6 @@ class ChangePasswordController extends Controller
            
             $data = $request->all();
 
-            /*$validated = $request->validate([
-                'password'=>'required|min:8|max:14',
-                'match_password'=>[Rule::when(!Hash::check($data['password'], $user['password']),['required'])],
-                'newPassword' => 'required|min:8|max:14',
-                'confirmPassword' => 'required|min:8|max:14|same:newPassword',
-            ]);*/
-
             $rules = [
                 'password'=>'required|min:8|max:14',
                 'match_password'=>[Rule::when(!Hash::check($data['password'], $user['password']),['required'])],
@@ -50,25 +43,18 @@ class ChangePasswordController extends Controller
                 'confirmPassword' => 'required|min:8|max:14|same:newPassword',
             ];
 
-            //$validator = Validator::make($data, $rules);
-
             $validated = $request->validate($rules);
+            $user_object = new User();
+            $result = $user_object->changePassword($user,$data);
 
-            // if ($validator->fails()) {
-                
-            // }
-
-            if (Hash::check($data['password'], $user['password'])) {
-
-                $user->password = Hash::make($data['newPassword']);
-                $user->save();
-
+            if ($result) {
                 $request->session()->flash('success', 'Password sucessfuuly Changeed!');
             } else {
                 $request->session()->flash('error', 'Old password does not matched.');
             }
         }
-        return view('ChangePassword');
+        
+        return view("ChangePassword");
     }
     
 }

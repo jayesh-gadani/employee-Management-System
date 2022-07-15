@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>New task</h1>
+            <h1>{{isset($tasks->id)?'Update Task':'New Task'}}</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -137,7 +137,7 @@
 		                <div class="form-group">
 		                  <label>Date:</label><span class='text-danger'>*</span>
 		                    <div class="input-group date" data-target-input="nearest">
-		                        <input type="date" name="endDate" class="form-control"value="{{old('endDate') ? old('endDate') : $tasks->end_date}}>
+		                        <input type="date" name="endDate" class="form-control" value="{{old('endDate') ? old('endDate') : $tasks->end_date}}">
 		                        
 		                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -161,7 +161,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary">{{isset($tasks->id)?'Update ':'Submit'}}</button>
                   <a href='{{route('listing_task')}}' class="btn btn-primary">cancel</a>
                 </div>
               </form>

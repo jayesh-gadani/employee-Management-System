@@ -8,7 +8,9 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>New user registration</h1>
+            <h1>
+            {{isset($user->name)?'Update user':'Add New user'}}
+            </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -40,7 +42,8 @@
                 </div>
               @endif
               <div class="card-header">
-                <h3 class="card-title">New user<small>  registration form</small></h3>
+
+                <h3 class="card-title">User Detail<small></small></h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -118,7 +121,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary">{{isset($user->name)?'Update':'Submit'}}</button>
                    <a href='{{route('user')}}' class="btn btn-primary">cancel</a>
                 </div>
               </form>

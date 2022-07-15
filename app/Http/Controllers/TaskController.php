@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\AssignProject;
 use Response;
 use Config;
+use Exception;
 
 class TaskController extends BaseController
 {
@@ -23,7 +24,7 @@ class TaskController extends BaseController
     public function index()
     {
         //$tasks = Task::All();
-        $tasks=new Task();
+        $tasks = new Task();
         $tasks = $tasks->displayAll(); 
         return view("task.ViewTasks",compact('tasks'));
     }
@@ -51,23 +52,16 @@ class TaskController extends BaseController
                 return redirect('add_task')
                         ->withErrors($validator)
                         ->withInput();
-             }
-            $id = Auth::user()->id;
-            $tasks->title = $data['title'];
-            $tasks->description = $data['description'];
-            $tasks->user_id = $data['userId'];
-            $tasks->project_id = (int)$data['projectId'];
-            $tasks->start_date = $data['startDate'];
-            $tasks->end_date = $data['endDate'];
-            $tasks->status = 1;
-            $tasks->created_by = $id;
-            $tasks->updated_by = $id;
-            $tasks->save();
-            $request->session()->flash('success', 'Task Added Sucessfully!');
+            }
+            $result = $tasks->addTask($data);
+            if ($result)
+                $request->session()->flash('success', 'Task Added Sucessfully!');
+            else
+                $request->session()->flash('error', 'Failed to add Task !');
 
             return redirect()->route('listing_task');   
 
-            echo "<pre>"; print_r($data); exit;
+            
         }    
           
         return view("task.addNewTask",compact('tasks','projects'));
@@ -78,19 +72,17 @@ class TaskController extends BaseController
       
        $id = $request['id'];
        // $project = AssignProject::find(project_id,'=',$id);
-       $users = AssignProject::where('project_id', $id)->get();
-
-
+       $tasks = new Task();
+       $users = $tasks->userLoad($id);
        return view('task.loadUser',compact('users'));
-       
-
     }
     public function deleteTask(Request $request)
     {
         $data = $request -> all();
-
-        $task = Task::find($data['id']);
-         if ($task -> delete()) {
+        $id = $data['id'];
+        $tasks = new Task();
+        $result = $tasks->deleteTask($id);
+         if ($result) {
             $request -> session() -> flash('success','Task is Sucessfully deleted');
         }
         else{
@@ -103,8 +95,11 @@ class TaskController extends BaseController
     {
         
         //$tasks = new Task();
-        $tasks = Task::find($id); 
-        $projects=Project::All();
+        $tasks = Task::find($id);
+        if (!$tasks) {
+            throw new Exception("Error Processing Request", 401);
+        } 
+        $projects = Project::All();
         if ($request -> isMethod('POST')) {
             $data = $request->all();
 
@@ -124,17 +119,13 @@ class TaskController extends BaseController
                         ->withErrors($validator)
                         ->withInput();
              }
-            $id = Auth::user()->id;
-            //echo "<pre>"; print_r($data); exit;
-            $tasks->title = $data['title'];
-            $tasks->description = $data['description'];
-            $tasks->user_id = $data['userId'];
-            $tasks->project_id = $data['projectId'];
-            $tasks->start_date = $data['startDate'];
-            $tasks->end_date = $data['endDate'];
-            $tasks->save();
-            $request->session()->flash('success', 'Task Updated Sucessfully!');
-
+        
+            $task = new Task();
+            $result = $task->editTask($data, $id);
+            if($result)
+                $request->session()->flash('success', 'Task Updated Sucessfully!');
+            else
+                $request->session()->flash('error', 'Task not Updated Sucessfully!');
             return redirect()->route('listing_task');           
          }
           return view("task.addNewTask", compact('tasks','projects')); 

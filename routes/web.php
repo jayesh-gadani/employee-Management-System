@@ -43,7 +43,7 @@ Route::get('/user',[UserController::class,'index'])->name('user');
 Route::any('add',[UserController::class,'add'])->name('add');
 Route::any('edit/{id}',[UserController::class,'edit'])->name('edit');
 Route::any('delete',[UserController::class,'delete'])->name('delete');
-Route::any('parmittion/{id}',[UserController::class,'parmittion'])->name('parmittion');
+Route::any('parmission/{id}',[UserController::class,'parmission'])->name('parmission');
 
 //project
 

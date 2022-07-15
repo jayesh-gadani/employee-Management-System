@@ -1,6 +1,6 @@
 
 @extends('auth.layout')
-
+@section('pageTitle','User Login')
 @section('content')
 
   <div class="card">
@@ -27,12 +27,13 @@
               <span class="fas fa-envelope"></span>
             </div>
           </div>
-        </div>
-         @error('email')
+          @error('email')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
-        @enderror
+          @enderror
+        </div>
+
         <div class="input-group mb-3">
           <input type="password" class="form-control" placeholder="Password" name="password">
           <div class="input-group-append">
@@ -40,17 +41,18 @@
               <span class="fas fa-lock"></span>
             </div>
           </div>
-        </div>
-
-        @error('password')
+           @error('password')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
         @enderror
+        </div>
+
+       
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+              <input type="checkbox" id="remember" name="parmission" id="remember" {{ old('remember') ? 'checked' : '' }}>
               <label for="remember">
                 {{ __('Remember Me') }}
               </label>
@@ -70,12 +72,12 @@
 
       <p class="mb-1">
         @if (Route::has('password.request'))
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Forgot Your Password?') }}
+                <a class="text-center" href="{{ route('password.request') }}">
+                {{ __('Forgot Your Password?') }}
                  </a>
             @endif
       </p>
-      <p class="mb-0">
+      <p class="mb-2">
         <a href="{{ __('register') }}" class="text-center">Register a new membership</a>
       </p>
     </div>

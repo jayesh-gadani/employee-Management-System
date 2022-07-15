@@ -39,7 +39,7 @@
             
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">User Listing</h3> <div align='right'><a class="btn btn-primary" href='{{route('add_project')}}'>Add new project</a></div>
+                <h3 class="card-title"></h3> <div align='right'><a class="btn btn-primary" href='{{route('add_project')}}'>Add new project</a></div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -50,7 +50,8 @@
                     <th>Description</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Status</th>  
+                    <th>Status</th>
+                    <th>Assign Project</th>  
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -71,13 +72,12 @@
 
 
                     </td>
+                    <td><a class='smallButton' name="{{$project->title}}" href='' id="{{$project->id}}">Assign Project</a></td>
                     <td>
 
                       <a href="{{ route('edit_project',['id' => $project->id]) }}"><i class='far fa-edit' title='Edit Project'></i></a>
                      
                        <a class='confirm' data-title="{{$project->title}}" href='' data-id="{{$project->id}}"><i class='fas fa-trash' title="Delete Project"></i></a>
-
-                      <a class='smallButton' name="{{$project->title}}" href='' id="{{$project->id}}">Assign Project</a>
                     </td>
                        
                   </tr>
@@ -85,16 +85,7 @@
                     @endforeach
 
                   </tbody>
-                  <tfoot>
-                  <tr>
-                     <th>Title</th>
-                    <th>Description</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>  
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
+                 
                 </table>
                 <br>
                 

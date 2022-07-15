@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use Date;
 use Response;
 use DB;
-
+use Exception;
 
 class ProjectsController extends Controller
 {
@@ -94,8 +94,8 @@ class ProjectsController extends Controller
     {
         $data = $request -> all();
         
-       $project=new Project();
-       $result=$project->deleteProject($data['id']);
+       $project = new Project();
+       $result = $project->deleteProject($data['id']);
        
         if ($result) {
             $request -> session() -> flash('success','Project is Sucessfully deleted');
@@ -117,6 +117,9 @@ class ProjectsController extends Controller
     public function editProject(Request $request, $id)
     {
         $project = Project::find($id);
+        if (!$project) {
+            throw new Exception("Error Processing Request", 401);
+        }
         if ($request -> isMethod('POST')) {
            
             $data = $request->all();
@@ -157,20 +160,20 @@ class ProjectsController extends Controller
         $data = $request->all();
 
         
-         $users_id=$request->get('userId');
-        if($users_id==null)
+         $users_id = $request->get('userId');
+        if($users_id == null)
         {
             return Response::json(array('status' => 'failed', 'message' => 'Please select users'));
         }
-        $users_id=$data['userId'];
-        $project=new Project();
-        $result=$project->assignProject($users_id, $data['projectId']);
+        $users_id = $data['userId'];
+        $project = new Project();
+        $result = $project->assignProject($users_id, $data['projectId']);
 
-        if($result==true) {
+        if($result == true) {
             $request -> session() -> flash('success', 'Sucessfully Assigned Project!');
             return Response::json(array('status' => 'success', 'message' => 'Project assigned sucessfully '));
         }
-        else if($result==false) {
+        else if($result == false) {
             $request -> session() -> flash('Error', 'Failed to assigned Project!');
             return Response::json(array('status' => 'error', 'message' => 'Failed to assigned Project'));
         }
@@ -185,12 +188,12 @@ class ProjectsController extends Controller
     {
        
         $data = $request->all();
-        $id=$data['id'];
+        $id = $data['id'];
 
         $project = new Project();
-        $array= $project->modalLoad($id);
-        $project=$array['project'];
-        $users=$array['users'];
+        $array = $project->modalLoad($id);
+        $project = $array['project'];
+        $users = $array['users'];
         return view('project.loadAjax',compact('project','users'));
 
     }

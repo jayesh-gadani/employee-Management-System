@@ -27,7 +27,7 @@ class Project extends Model
      */
     public function displayAll()
     {
-        $iteams=config('paginate');
+        $iteams = config('paginate');
         $projects = Project::paginate($iteams);
         return($projects);
     }
@@ -40,13 +40,13 @@ class Project extends Model
     {
         $project = new Project();
         $id = Auth::user()->id;
-        $project->title=$data['title'];
-        $project->description=$data['description'];
-        $project->start_date=$data['startDate'];
-        $project->end_date=$data['endDate'];
-        $project->status=1;
-        $project->created_by=$id;
-        $project->updated_by=$id;
+        $project->title = $data['title'];
+        $project->description = $data['description'];
+        $project->start_date = $data['startDate'];
+        $project->end_date = $data['endDate'];
+        $project->status = 1;
+        $project->created_by = $id;
+        $project->updated_by = $id;
 
         return ($project->save() ? true :false) ;
     }
