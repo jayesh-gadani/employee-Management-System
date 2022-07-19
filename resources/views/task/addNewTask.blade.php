@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>{{isset($tasks->id)?'Update Task':'New Task'}}</h1>
+            <h1>{{isset($tasks->id)?'Update task':'Add task'}}</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
-              <li class="breadcrumb-item active"><a href='{{route('add_task')}}'>Task</a></li>
+              <li class="breadcrumb-item active"><a href='{{route('add_task')}}'>Add task</a></li>
             </ol>
           </div>
         </div>
@@ -40,7 +40,7 @@
                 </div>
               @endif
               <div class="card-header">
-                <h3 class="card-title">New Task<small></small></h3>
+                <h3 class="card-title">{{isset($tasks->id)?'Update task':'Add task'}}<small></small></h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -88,6 +88,17 @@
                     <div id="user_load">
 	                    <select class="form-control" name="userId">
 	               			<option value="">select user</option>
+                      @if(isset($tasks->user_id))
+                      @foreach($assignProjects as $key => $user)
+                        @if($user->user->id == $tasks->user_id)
+                          <option value="{{$user->user->id}}" selected>{{$user->user->name}}</option>
+                        @else
+                          <option value="{{$user->user->id}}">
+                            {{$user->user->name}}
+                          </option>
+                         @endif 
+                      @endforeach
+                      @endif
 	               		</select>
 
             		</div>
@@ -95,8 +106,26 @@
                       <div style="color:red">{{ $message }}</div>
                     @enderror
                   </div>
+                   <div class="form-group">
 
-                   <div class="row">
+                    <label for="exampleInputEmail1">Status</label><span class='text-danger'>*</span>
+                    <select  name="task_status" class="form-control" id="exampleInputEmail1"> 
+                      <option value="">Select status</option>
+                     
+                      @foreach(config('global.task_status') as $key => $value)
+                                @if(isset($tasks->status) && $key==$tasks->status)
+                                    <option value='{{$key}}'  selected>{{$value}}</option>
+                                @else
+                                    <option value='{{$key}}'>{{$value}}</option>
+                                @endif       
+                      @endforeach
+
+                    </select>
+                    @error('task_status')
+                      <div style="color:red">{{ $message }}</div>
+                    @enderror
+                  </div>
+                <div class="row">
 			          <div class="col-md-6">
 
 			            <div class="card card-danger">
@@ -162,7 +191,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">{{isset($tasks->id)?'Update ':'Submit'}}</button>
-                  <a href='{{route('listing_task')}}' class="btn btn-primary">cancel</a>
+                  <a href='{{route('listing_task')}}' class="btn btn-primary">Cancel</a>
                 </div>
               </form>
             </div>

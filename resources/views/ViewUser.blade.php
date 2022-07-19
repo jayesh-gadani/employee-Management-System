@@ -8,12 +8,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Listing user</h1>
+            <h1>List users</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
-              <li class="breadcrumb-item active"><a href="{{route('user')}}">List User</li>
+              <li class="breadcrumb-item active"><a href="{{route('user')}}">User</a></li>
+              <li class="breadcrumb-item active">List</li>
             </ol>
           </div>
         </div>
@@ -27,7 +28,7 @@
         <div class="row">
           <div class="col-12">
               @if(Session::has('success'))
-                <div class="alert alert-success" role="alert">
+                <div id="successMessage" class="alert alert-success" role="alert">
                   {{ Session::get('success') }}
                 </div>
               @endif
@@ -42,13 +43,16 @@
                 <h3 class="card-title"></h3> <div align='right'><a class="btn btn-primary" href='{{route('add')}}'>Add new user</a></div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+        
+                <div class="card-body table-responsive p-0">
+                <table id="example2" class="table table-hover text-nowrap">
+                
                   <thead>
                   <tr>
+                    <th>Sr.no</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Contact</th>
+                    <th>Contact number</th>
                     <th>Address</th>
                     <th>Role</th>
                     <th>Position</th>
@@ -57,29 +61,33 @@
                   </tr>
                   </thead>
                   <tbody>
+                  <?php $number = ($users->currentpage()-1)* $users->perpage() + 1;?>
+                    @foreach($users as $no => $user)
                   
-                    @foreach($users as $user)
                   <tr>
+                    <td>{{$number++}}</td>
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->contact}}</td>
                     <td>{{$user->address}}</td>
-                    <td>{{$user->role}}</td>
-                    <td>{{$user->position}}</td>
-                    <td> @if($user->status==0)
+                    <td>{{ config('global.roles')[$user->role]}}</td>
+                    <td>{{config('global.positions')[$user->position]}}</td>
+                    <td>@if($user->status==0)
                             <a href='{{ route('parmission',['id' => $user->id]) }}'>
-                              <small class="badge badge-success"><i title="Approved" class="fa fa-check-circle" aria-hidden="true">Approved</i></small></a>
+                            <small class="badge badge-danger">Approval</small></a>
                         @else
-                        <a href='{{ route('parmission',['id' => $user->id]) }}'>
-                          <small class="badge badge-danger">
-                            <i class="fa fa-times-circle" title="Parmission Disapprove" aria-hidden="true">Approval</i></small></a>
+                       
+                            <a href='{{ route('parmission',['id' => $user->id]) }}'>
+                            <small class="badge badge-success">Approved</small></a>
                             
                         @endif</td>
                     <td><a href='{{ route('edit',['id' => $user->id]) }}'><i class='far fa-edit' title='Edit User'></i></a> 
 
                         <a class="confirm" data-title="{{$user->name}}" data-id="{{$user->id}}"><i class='fas fa-trash' title="Delete User"></i></a> 
+  
 
-                       
+
+
 
                   </tr>
                   
@@ -108,11 +116,17 @@
 <script>
     $(document).ready(function()
         {
+            
+            
+                setInterval(function () {
+                     $("#successMessage").hide(1000);
+                },2000);
+           
             $(document).on('click', '.confirm', function(event) {
                 event.preventDefault();
                 var id=$(this).data('id');
                 var title=$(this).data('title');
-                var result=confirm("Are you sure you want to delete"+ title +" user ?");
+                var result=confirm("Are you sure you want to delete "+ title +" user ?");
                 
                 if (result) {
                 
@@ -123,7 +137,8 @@
                     success: function(data, textStatus, jqXHR)
                     {
 
-                         location.reload(); 
+                        window.location.href = '{{route("user")}}';
+                        
                     },
                     error: function (jqXHR, textStatus, errorThrown)
                     {

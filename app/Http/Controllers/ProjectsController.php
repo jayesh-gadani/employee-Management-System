@@ -54,21 +54,23 @@ class ProjectsController extends Controller
     	$project = new Project();
     	if ($request -> isMethod('POST')) {
            
+
             $data = $request->all();
             $rules =[
             	'title' => 'required',
                 'description' => 'required',
                 'startDate' => 'required',
-                'endDate' => 'required|after:startDate'
+                'endDate' => 'required|after_or_equal:startDate'
 			];
+
 			//$validated = $request->validate($rules);
 			$validator = Validator::make($data, $rules);
-
             if ($validator->fails()) {
-                return redirect('add_project')
+                return redirect()->route('add_project')
                         ->withErrors($validator)
                         ->withInput();
             }
+
             $result = $project->addProject($data);
             if ($result) {
                 $request->session()->flash('success', 'Project Added Sucessfully!');
@@ -127,13 +129,13 @@ class ProjectsController extends Controller
                 'title' => 'required',
                 'description' => 'required',
                 'startDate' => 'required',
-                'endDate' => 'required|after:startDate'
+                'endDate' => 'required|after_or_equal:startDate'
             ];
             
             $validator = Validator::make($data, $rules);
 
             if ($validator->fails()) {
-                return redirect('add_project')
+                return redirect()->route('edit_project',['id' => $id])
                         ->withErrors($validator)
                         ->withInput();
              }
@@ -161,10 +163,18 @@ class ProjectsController extends Controller
 
         
          $users_id = $request->get('userId');
-        if($users_id == null)
-        {
+         
+        if($users_id[0] == null) {
+            return Response::json(array('status' => 'failed', 'message' => 'Please select users'));
+            
+        } 
+        if($users_id == null) {
             return Response::json(array('status' => 'failed', 'message' => 'Please select users'));
         }
+        if(sizeof($users_id)>3) {
+            return Response::json(array('status' => 'failed', 'message' => 'you can select only three users'));   
+        }
+
         $users_id = $data['userId'];
         $project = new Project();
         $result = $project->assignProject($users_id, $data['projectId']);
@@ -194,7 +204,9 @@ class ProjectsController extends Controller
         $array = $project->modalLoad($id);
         $project = $array['project'];
         $users = $array['users'];
-        return view('project.loadAjax',compact('project','users'));
+        $selected_user = $array['selected_user'];
+
+        return view('project.loadAjax',compact('project','users','selected_user'));
 
     }
 

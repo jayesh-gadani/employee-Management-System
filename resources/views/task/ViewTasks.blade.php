@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Task of projects</h1>
+            <h1>List task</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
-              <li class="breadcrumb-item active"><a href='{{route("listing_task")}}'>Listing task</a></li>
+              <li class="breadcrumb-item active"><a href='{{route("listing_task")}}'>List task</a></li>
             </ol>
           </div>
         </div>
@@ -68,9 +68,15 @@
                     <td>{{$task->end_date}}</td>
                     <td>
                         @if($task->status==1)
-                            Active
-                        @else    
-                            Inactive
+                            Scoping
+                        @elseif($task->status==2)    
+                            Inprogress
+                        @elseif($task->status==2)    
+                            Hold
+                        @elseif($task->status==2)    
+                            QA
+                        @else
+                            Done
                         @endif    
 
 
@@ -88,18 +94,7 @@
                     @endforeach
 
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>User</th>
-                    <th>Project</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>  
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
+                 
                 </table>
                 <br>
 

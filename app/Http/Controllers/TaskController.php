@@ -16,6 +16,7 @@ use App\Models\AssignProject;
 use Response;
 use Config;
 use Exception;
+use DB;
 
 class TaskController extends BaseController
 {
@@ -41,15 +42,16 @@ class TaskController extends BaseController
                 'title' => 'required',
                 'description' => 'required',
                 'startDate' => 'required',
-                'endDate' => 'required|after:startDate',
+                'endDate' => 'required|after_or_equal:startDate',
                 'userId' => 'required',
                 'projectId' => 'required',
+                'task_status'=>'required',
             ];
             
             $validator = Validator::make($data, $rules);
 
             if ($validator->fails()) {
-                return redirect('add_task')
+                return redirect()->route('add_task')
                         ->withErrors($validator)
                         ->withInput();
             }
@@ -98,7 +100,10 @@ class TaskController extends BaseController
         $tasks = Task::find($id);
         if (!$tasks) {
             throw new Exception("Error Processing Request", 401);
-        } 
+        }
+        $projectId = $tasks->project_id;
+        $assignProjects = AssignProject::where('project_id', '=', $projectId)
+                ->get();
         $projects = Project::All();
         if ($request -> isMethod('POST')) {
             $data = $request->all();
@@ -107,15 +112,16 @@ class TaskController extends BaseController
                 'title' => 'required',
                 'description' => 'required',
                 'startDate' => 'required',
-                'endDate' => 'required|after:startDate',
+                'endDate' => 'required|after_or_equal:startDate',
                 'userId' => 'required',
                 'projectId' => 'required',
+                'task_status'=>'required',
             ];
             
             $validator = Validator::make($data, $rules);
 
             if ($validator->fails()) {
-                return redirect('add_task')
+                return redirect()->route('editTask',['id' => $id])
                         ->withErrors($validator)
                         ->withInput();
              }
@@ -128,7 +134,7 @@ class TaskController extends BaseController
                 $request->session()->flash('error', 'Task not Updated Sucessfully!');
             return redirect()->route('listing_task');           
          }
-          return view("task.addNewTask", compact('tasks','projects')); 
+          return view("task.addNewTask", compact('tasks','projects', 'assignProjects')); 
      }
 
 }

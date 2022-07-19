@@ -61,7 +61,7 @@ class Task extends Model
         $tasks->project_id = (int)$data['projectId'];
         $tasks->start_date = $data['startDate'];
         $tasks->end_date = $data['endDate'];
-        $tasks->status = 1;
+        $tasks->status = $data['task_status'];
         $tasks->created_by = $id;
         $tasks->updated_by = $id;
 
@@ -100,6 +100,7 @@ class Task extends Model
         $tasks->project_id = $data['projectId'];
         $tasks->start_date = $data['startDate'];
         $tasks->end_date = $data['endDate'];
+        $tasks->status = $data['task_status'];
         return($tasks->save()? true : false);
     }
 }

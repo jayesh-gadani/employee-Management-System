@@ -39,19 +39,19 @@ Route::any('reset_password',[MailController::class,'resetPassword'])->name('rese
 
 
 //user
-Route::get('/user',[UserController::class,'index'])->name('user');
-Route::any('add',[UserController::class,'add'])->name('add');
-Route::any('edit/{id}',[UserController::class,'edit'])->name('edit');
-Route::any('delete',[UserController::class,'delete'])->name('delete');
-Route::any('parmission/{id}',[UserController::class,'parmission'])->name('parmission');
+Route::get('/user/lists',[UserController::class,'index'])->name('user');
+Route::any('user/add',[UserController::class,'add'])->name('add');
+Route::any('user/edit/{id}',[UserController::class,'edit'])->name('edit');
+Route::any('user/delete',[UserController::class,'delete'])->name('delete');
+Route::any('user/parmission/{id}',[UserController::class,'parmission'])->name('parmission');
 
 //project
 
-Route::get('/project',[ProjectsController::class,'index'])->name('listing_project');
-Route::any('/add_project',[ProjectsController::class,'addProject'])->name('add_project');
-Route::any('/edit_project/{id}',[ProjectsController::class,'editProject'])->name('edit_project');
-route::any('/delete_project',[ProjectsController::class,'deleteProject'])->name('delete_project');
-route::POST('/project_assign',[ProjectsController::class,'projectAssign'])->name('projectAssign');
+Route::get('/project/lists',[ProjectsController::class,'index'])->name('listing_project');
+Route::any('/project/add',[ProjectsController::class,'addProject'])->name('add_project');
+Route::any('/project/edit/{id}',[ProjectsController::class,'editProject'])->name('edit_project');
+route::any('/project/delete',[ProjectsController::class,'deleteProject'])->name('delete_project');
+route::POST('/project/assign',[ProjectsController::class,'projectAssign'])->name('projectAssign');
 
 //Ajax 
 
@@ -59,8 +59,8 @@ route::GET('/modal_load',[ProjectsController::class,'ajaxLoad'])->name('modalLoa
 Auth::routes();
 
 //Tasks
-Route::get('/tasks',[TaskController::class,'index'])->name('listing_task');
-Route::any('/add_task',[TaskController::class,'addTask'])->name('add_task');
-route::GET('/user_load',[TaskController::class,'userLoad'])->name('userLoad');
-route::any('/edit_task/{id}',[TaskController::class,'editTask'])->name('editTask');
-route::GET('/delete_task',[TaskController::class,'deleteTask'])->name('deleteTask');
+Route::get('/task/lists',[TaskController::class,'index'])->name('listing_task');
+Route::any('/task/add',[TaskController::class,'addTask'])->name('add_task');
+route::GET('/task/user_load',[TaskController::class,'userLoad'])->name('userLoad');
+route::any('/task/edit/{id}',[TaskController::class,'editTask'])->name('editTask');
+route::GET('/task/delete',[TaskController::class,'deleteTask'])->name('deleteTask');

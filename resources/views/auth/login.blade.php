@@ -5,7 +5,7 @@
 
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Sign in</p>
 
       @if(Session::has('sucess'))
                 <div class="alert alert-success" role="alert">
@@ -51,12 +51,7 @@
        
         <div class="row">
           <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember" name="parmission" id="remember" {{ old('remember') ? 'checked' : '' }}>
-              <label for="remember">
-                {{ __('Remember Me') }}
-              </label>
-            </div>
+            
           </div>
           <!-- /.col -->
           <div class="col-4">

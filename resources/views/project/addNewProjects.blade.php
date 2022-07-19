@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
-              <li class="breadcrumb-item active"><a href="{{route('add_project')}}">Project</a></li>
+              <li class="breadcrumb-item active"><a href="{{route('add_project')}}">Add project</a></li>
             </ol>
           </div>
         </div>
@@ -130,7 +130,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">{{isset($project->id)?'Update':'Submit'}}</button>
-                  <a href='{{route('listing_project')}}' class="btn btn-primary">cancel</a>
+                  <a href='{{route('listing_project')}}' class="btn btn-primary">Cancel</a>
                 </div>
               </form>
             </div>
