@@ -138,7 +138,6 @@ class User extends Authenticatable
     public function editUser(array $data, $id)
     {
         $user = User::find($id);
-
             $user->name = $data["name"];
             $user->email = $data["email"];
             $user->contact = $data["contact"];
@@ -178,5 +177,17 @@ class User extends Authenticatable
         else
             return(false);
 
+    }
+
+    public function changePassword($user, $data)
+    {
+        if (Hash::check($data['password'], $user['password'])) {
+
+                $user->password = Hash::make($data['newPassword']);
+                $user->save();
+                return(true);
+            } else {
+                return(false);
+            }
     }
 }

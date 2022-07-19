@@ -1,19 +1,19 @@
 
 @extends('auth.layout')
-
+@section('pageTitle','Forgot Password')
 @section('content')
 
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Forgot Password</p>
        @if(Session::has('sucess'))
                 <div class="alert alert-success" role="alert">
                   {{ Session::get('sucess') }}
                 </div>
               @endif
       @if(Session::has('error'))
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-danger" role="alert">
                   {{ Session::get('error') }}
                 </div>
       @endif

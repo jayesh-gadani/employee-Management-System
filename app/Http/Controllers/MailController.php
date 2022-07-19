@@ -40,7 +40,7 @@ class MailController extends Controller
         $data = $request->All();
 
         $validated = $request->validate([
-            'email' => 'required|string|max:255',       
+            'email' => 'required|email|string|max:255',       
         ]);
 
        
@@ -66,7 +66,7 @@ class MailController extends Controller
 
         }   
         else {
-            $request -> session() -> flash('error', 'Email id is not valid!');
+            $request -> session() -> flash('error', ' This Email id does not exists !');
             return redirect() -> route('password.request');
          } 
      

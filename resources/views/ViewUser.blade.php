@@ -39,7 +39,7 @@
             
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">User listing</h3> <div align='right'><a class="btn btn-primary" href='{{route('add')}}'>Add new user</a></div>
+                <h3 class="card-title"></h3> <div align='right'><a class="btn btn-primary" href='{{route('add')}}'>Add new user</a></div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -52,6 +52,7 @@
                     <th>Address</th>
                     <th>Role</th>
                     <th>Position</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -65,34 +66,27 @@
                     <td>{{$user->address}}</td>
                     <td>{{$user->role}}</td>
                     <td>{{$user->position}}</td>
+                    <td> @if($user->status==0)
+                            <a href='{{ route('parmission',['id' => $user->id]) }}'>
+                              <small class="badge badge-success"><i title="Approved" class="fa fa-check-circle" aria-hidden="true">Approved</i></small></a>
+                        @else
+                        <a href='{{ route('parmission',['id' => $user->id]) }}'>
+                          <small class="badge badge-danger">
+                            <i class="fa fa-times-circle" title="Parmission Disapprove" aria-hidden="true">Approval</i></small></a>
+                            
+                        @endif</td>
                     <td><a href='{{ route('edit',['id' => $user->id]) }}'><i class='far fa-edit' title='Edit User'></i></a> 
 
                         <a class="confirm" data-title="{{$user->name}}" data-id="{{$user->id}}"><i class='fas fa-trash' title="Delete User"></i></a> 
 
-                        @if($user->status==0)
-                            <a href='{{ route('parmittion',['id' => $user->id]) }}'><i title="Parmission Approval" class="fa fa-check-circle" aria-hidden="true"></i></a>
-                        @else
-                        <a href='{{ route('parmittion',['id' => $user->id]) }}'>
-                            <i class="fa fa-times-circle" title="Parmission Disapprove" aria-hidden="true"></i></a>
-                            
-                        @endif
+                       
 
                   </tr>
                   
                     @endforeach
 
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Position</th>
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
+                 
                 </table>
                 <br>
                 {{ $users->links('pagination::bootstrap-4') }}

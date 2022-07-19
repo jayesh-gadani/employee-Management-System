@@ -7,7 +7,7 @@ Use DateTime;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Exceptions;
+use Exception;
 use Illuminate\Support\Str;
 use Mail;
 use Config;
@@ -51,9 +51,9 @@ class UserController extends Controller
             $data = $request->all();
           
             $validated = $request->validate([
-                'name' => 'required|max:255',
-                'email' => 'required',
-                'contact' => 'required|digits:10',
+                'name' => 'required|max:255|min:3',
+                'email' => 'required|email|unique:users',
+                'contact' => 'required|digits:10|numeric',
                 'address' => 'required',
                 'role' => 'required',
                 'position' => 'required',
@@ -111,6 +111,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
         
+        if (!$user) {
+            throw new Exception("Error Processing Request", 401);
+        }
         if ($request -> isMethod('POST')) {
             
             
@@ -119,8 +122,8 @@ class UserController extends Controller
             $validated = $request ->validate([
                 
                 'name' => 'required|max:255',
-                'email' => 'required',
-                'contact' => 'required|digits:10',
+                'email' => 'required|email|unique:users',
+                'contact' => 'required|numeric|digits:10',
                 'address' => 'required',
                 'role' => 'required',
                 'position' => 'required',
@@ -128,7 +131,7 @@ class UserController extends Controller
             ]);
            
             $user = new User();
-            $result=$user->editUser($data, $id);
+            $result = $user->editUser($data, $id);
             if($result) {
                 $request -> session() -> flash('success', 'User updated Sucessfully!');
                 return redirect() -> route('user');    
@@ -142,12 +145,12 @@ class UserController extends Controller
 
     public function parmission(Request $request, $id)
     {
-        $user=new User();
-        $result=$user->parmittiion($id);         
+        $user = new User();
+        $result = $user->parmission($id);         
         if($result)
-            $message="Parmission Approval!";
+            $message = "Parmission Approval!";
         else
-             $message="Parmission Dis Approval!";
+             $message = "Parmission Dis Approval!";
         $request -> session() -> flash('success', $message);
         return redirect() -> route('user');
 

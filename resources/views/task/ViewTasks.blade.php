@@ -78,7 +78,7 @@
                         <td>
                         <a href='{{ route('editTask',['id' => $task->id]) }}'><i class='far fa-edit' title="Edit Task"></i></a> 
                        
-                        <a class="confirm" href='' id="{{$task->id}}" data-title="{{$task->title}}"><i class='fas fa-trash' title="Delete Task"></i></a>
+                        <a class="confirm" href='' data-id="{{$task->id}}" data-title="{{$task->title}}"><i class='fas fa-trash' title="Delete Task"></i></a>
 
 
                         </td>
@@ -121,7 +121,7 @@
               {
                 $(document).on('click', '.confirm', function(event) {
                 event.preventDefault();
-                var id=event.target.id;
+                var id=$(this).data('id');;
                 var title=$(this).data('title');
                 var result=confirm("Are you sure you want to delete"+title+" task ?");
                 if (result) {
