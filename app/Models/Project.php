@@ -96,10 +96,15 @@ class Project extends Model
     {
         //echo "<pre>"; print_r($users_id); exit;
         $flag=false;
+          $record = DB::table('assign_projects')
+                    ->where('project_id', '=', $projectId)
+                    ->delete();
+                   
         foreach($users_id as $user_id)
         {
 
-            $projects = DB::table('assign_projects')
+
+           /* $projects = DB::table('assign_projects')
                 ->where('user_id', '=', $user_id)
                 ->where('project_id', '=', $projectId)
                 ->get();
@@ -111,7 +116,11 @@ class Project extends Model
                     
                 }
                 else
-                {
+                {*/
+
+                    //$record=AssignProject::where("project_id","=",$projectId);
+                  
+                    
                     $project = new AssignProject();
                     $project->user_id=$user_id;
                     $project->project_id=$projectId;
@@ -124,7 +133,7 @@ class Project extends Model
                     $flag=true;
 
                     
-                }
+               // }
         
         }
         return($flag==true?true:false);
@@ -134,11 +143,21 @@ class Project extends Model
     public function modalLoad($id)
     {
 
+        $user_id = DB::table('assign_projects')
+                ->where('project_id', '=', $id)
+                ->get();
+                $selectd_user = array();
+                foreach($user_id as $u_id)
+                {
+                    $selectd_user[] = $u_id->user_id;
+                }                
+
          $project = Project::find($id);
          $users = User::All(); 
          return [
             'project' => $project,
-            'users' => $users
+            'users' => $users,
+            'selected_user' => $selectd_user,
          ];
     }
 

@@ -14,11 +14,16 @@
           <div class="form-group">
             Project:- {{$project['title']}}<br>
             <label for="recipient-name" class="col-form-label">Select user to assign project:</label>
+           
             <select class="form-control" name="userId[]" multiple size=5>
-                <option>select user</option>
+              
                
                    @foreach($users as $user)
-                        <option value='{{$user->id}}'>{{$user->name}}</option>
+                      @if(in_array($user->id, $selected_user))  
+                        <option value='{{$user->id}}' selected>{{$user->name}}</option>
+                      @else
+                        <option value='{{$user->id}}'>{{$user->name}}</option>    
+                      @endif  
                     @endforeach
                
             </select>

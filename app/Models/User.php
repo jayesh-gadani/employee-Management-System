@@ -84,33 +84,46 @@ class User extends Authenticatable
             return(0);
         
     }
+
+    /**
+     * [displayAll function is used to display all data of user]
+     * @return [object] [it return all data of user table]
+     */
     public function displayAll()
     {
-        $iteams = config('paginate');
-        $users = User::paginate($iteams);
+        $perPage = config('paginate');
+
+        $users = User::paginate($perPage);
+
         return($users);
     }
+
+    /**
+     * [addUser function is used to add new user]
+     * @param array  $data     [data of user]
+     * @param [string] $password [temporary password]
+     */
     public function addUser(array $data,$password)
     {
-            $id = Auth::user()->id;
-            
-            $user = new User();
-            $user->name = $data["name"];
-            $user->email = $data["email"];
-            $user->contact = $data["contact"];
-            $user->address = $data["address"]; 
-            $user->password = Hash::make($password);
-            $user->role = $data["role"];
-            $user->position = $data["position"];
+        $id = Auth::user()->id;
+        
+        $user = new User();
+        $user->name = $data["name"];
+        $user->email = $data["email"];
+        $user->contact = $data["contact"];
+        $user->address = $data["address"]; 
+        $user->password = Hash::make($password);
+        $user->role = $data["role"];
+        $user->position = $data["position"];
 
-            $user->status = 1;
-            $user->created_by = $id;
-            $user->updated_by = $id;
-            $user->save();
-            if ($user)
-                return(1);
-            else
-                return(0);
+        $user->status = 1;
+        $user->created_by = $id;
+        $user->updated_by = $id;
+        $user->save();
+        if ($user)
+            return(1);
+        else
+            return(0);
     }
     /**
      * [deleteUser function is used to delete user]
@@ -119,7 +132,7 @@ class User extends Authenticatable
      */
     public function deleteUser(array $request)
     {
-        $id=$request['id'];
+        $id = $request['id'];
         $user = User::find($id);
 
         if ($user->delete()) {
@@ -130,7 +143,7 @@ class User extends Authenticatable
     }
 
     /**
-     * [editUser function is used to edit user]
+     * [editUser function is used to update user]
      * @param  array  $data [value that you want to change]
      * @param  [int] $id   [id of user]
      * @return [boolean]   [sucess for true and false for failed]
@@ -154,40 +167,41 @@ class User extends Authenticatable
     /**
      * [parmittiion is used to set the user parmission]
      * @param  int $id [id of user whom you want to set parmission]
-     * @return boolean     [description]
+     * @return  [boolean]      [true for sucess and false on failer]
      */
     public function parmission($id)
     {
         $user = User::find($id);
-
-        /*if (!$user) {
-            throw new Exception("Error Processing Request", 1);
-        }*/
-
         $status = $user['status'];
         $message = "";
-        if ($status == 0) {
-            $user->status = '1';            
+        if ( $status == 0 ) {
+            $user->status = '1';
         } else {
-            $user->status = '0';           
+            $user->status = '0';
         }   
         
-        if($user->save())
+        if ( $user->save() )
             return(true);
         else
             return(false);
 
     }
 
+    /**
+     * [changePassword function is used to change password]
+     * @param  [object] $user [data of user table]
+     * @param  [object] $data [data of user form]
+     * @return [boolean]      [true for sucess and false on failer]
+     */
     public function changePassword($user, $data)
     {
         if (Hash::check($data['password'], $user['password'])) {
 
-                $user->password = Hash::make($data['newPassword']);
-                $user->save();
-                return(true);
-            } else {
-                return(false);
-            }
+            $user->password = Hash::make($data['newPassword']);
+            $user->save();
+            return(true);
+        } else {
+            return(false);
+        }
     }
 }

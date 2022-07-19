@@ -1,6 +1,6 @@
  <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
+    <a href="{{'/home'}}" class="brand-link">
       <img src="../../dist/img/index.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Karavya Soltions</span>
     </a>
@@ -14,15 +14,7 @@
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
-          <a style="color:white" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
+         
         </div>
       </div>
 
@@ -44,53 +36,51 @@
             </a>
             
           </li>
-
-
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="fa fa-user" aria-hidden="true"></i>
+              <i class="nav-icon fa fa-user" aria-hidden="true"></i>
               <p>
                 User
-                <i class="fas fa-angle-left right"></i>
-                
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
-               <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{route('user')}}" class="nav-link">
-                  <i class="fa fa-list" aria-hidden="true"></i>
-                  <p>List User</p>
+                  <i class="nav-icon fa fa-list" aria-hidden="true"></i>
+                  <p>List users</p>
                 </a>
               </li>
-               <li class="nav-item">
-                <a href="{{route('add')}}" class="nav-link">
-                  <i class="fa fa-user-plus" aria-hidden="true"></i>
-                  <p>Add New User</p>
+              <li class="nav-item" >
+               <a href="{{route('add')}}" class="nav-link">
+                  <i class="nav-icon fa fa-user-plus" aria-hidden="true"></i>
+                  <p>Add user</p>
                 </a>
               </li>
-             
+              
+              
             </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="fa fa-briefcase" aria-hidden="true"></i>
+              <i class="nav-icon fa fa-briefcase" aria-hidden="true"></i>
               <p>
-                Projects
+                Project
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route('listing_project')}}" class="nav-link">
-                  <i class="fa fa-list" aria-hidden="true"></i>
-                  <p>List Projects</p>
+                  <i class="nav-icon fa fa-list" aria-hidden="true"></i>
+                  <p>List projects</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" >
                 <a href="{{route('add_project')}}" class="nav-link">
-                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                  <i class="nav-icon fa fa-plus-circle" aria-hidden="true"></i>
 
-                  <p>Add New Projects</p>
+                  <p>Add project</p>
                 </a>
               </li>
               
@@ -99,7 +89,7 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-             <i class="fa fa-tasks" aria-hidden="true"></i>
+             <i class="nav-icon fa fa-tasks" aria-hidden="true"></i>
               <p>
                 Tasks
                 <i class="fas fa-angle-left right"></i>
@@ -108,14 +98,14 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                 <a href="{{route('listing_task')}}" class="nav-link">
-                  <i class="fa fa-list" aria-hidden="true"></i>
-                  <p>List Task</p>
+                  <i class="nav-icon fa fa-list" aria-hidden="true"></i>
+                  <p>List task</p>
                 </a>
               </li>
                <li class="nav-item">
                 <a href="{{route('add_task')}}" class="nav-link">
-                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                  <p>Add NewTask</p>
+                  <i class="nav-icon fa fa-plus-circle" aria-hidden="true"></i>
+                  <p>Add task</p>
                 </a> 
               </li>
               
@@ -124,29 +114,13 @@
 
           <li class="nav-item">
             <a href='{{route('change_password')}}' class="nav-link">
-            <i class="fa fa-key" aria-hidden="true"></i>
+            <i class="nav-icon fa fa-key" aria-hidden="true"></i>
               <p>
-                Change Password
+                Change password
                 
               </p>
             </a>
           </li>
-          <li class="nav-item">
-             <a class="nav-link" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        {{ __('Logout') }}
-                                    </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-            </a>
-          </li>
-      
-  
-         
          
       </nav>
       <!-- /.sidebar-menu -->
