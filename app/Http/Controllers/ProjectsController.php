@@ -39,7 +39,6 @@ class ProjectsController extends Controller
     public function index(Request $request)
     {
         
-        //$projects = Project::All();
        $projects=new Project();
        $projects=$projects->displayAll();
         return view("project.ViewProjects",compact('projects'));
@@ -73,9 +72,9 @@ class ProjectsController extends Controller
 
             $result = $project->addProject($data);
             if ($result) {
-                $request->session()->flash('success', 'Project Added Sucessfully!');
+                $request->session()->flash('success', 'Project added sucessfully!');
             } else {
-                $request->session()->flash('error', 'Error in inserting Project!');
+                $request->session()->flash('error', 'Error in inserting project!');
 
             } 
             return redirect()->route('listing_project'); 
@@ -83,7 +82,6 @@ class ProjectsController extends Controller
         }
       
     	return view("project.addNewProjects",compact('project'));
-    	
     }
 
     /**
@@ -96,13 +94,13 @@ class ProjectsController extends Controller
     {
         $data = $request -> all();
         
-       $project = new Project();
-       $result = $project->deleteProject($data['id']);
+        $project = new Project();
+        $result = $project->deleteProject($data['id']);
        
         if ($result) {
-            $request -> session() -> flash('success','Project is Sucessfully deleted');
+            $request -> session() -> flash('success','Project is sucessfully deleted');
         } else {
-            $request -> session() -> flash('error','Error in project Deeleting');
+            $request -> session() -> flash('error','Error in project deleting');
            
         }
         return Response::json(array('status' => 'success', 'message' => 'Project assigned sucessfully '));
@@ -125,6 +123,7 @@ class ProjectsController extends Controller
         if ($request -> isMethod('POST')) {
            
             $data = $request->all();
+            
             $rules =[
                 'title' => 'required',
                 'description' => 'required',
@@ -143,9 +142,9 @@ class ProjectsController extends Controller
             $project = new Project();
             $result = $project->editProject($data, $id);
            if ($result)
-                $request->session()->flash('success', 'Project Sucessfully Edited!');
+                $request->session()->flash('success', 'Project sucessfully edited!');
             else
-                $request->session()->flash('error', 'Failes in Project Edited!');
+                $request->session()->flash('error', 'Failed in project edited!');
 
             return redirect()->route('listing_project');    
 
@@ -162,12 +161,7 @@ class ProjectsController extends Controller
         $data = $request->all();
 
         
-         $users_id = $request->get('userId');
-         
-        if($users_id[0] == null) {
-            return Response::json(array('status' => 'failed', 'message' => 'Please select users'));
-            
-        } 
+        $users_id = $request->get('userId');
         if($users_id == null) {
             return Response::json(array('status' => 'failed', 'message' => 'Please select users'));
         }
@@ -180,12 +174,12 @@ class ProjectsController extends Controller
         $result = $project->assignProject($users_id, $data['projectId']);
 
         if($result == true) {
-            $request -> session() -> flash('success', 'Sucessfully Assigned Project!');
+            $request -> session() -> flash('success', 'Sucessfully assigned project!');
             return Response::json(array('status' => 'success', 'message' => 'Project assigned sucessfully '));
         }
         else if($result == false) {
             $request -> session() -> flash('Error', 'Failed to assigned Project!');
-            return Response::json(array('status' => 'error', 'message' => 'Failed to assigned Project'));
+            return Response::json(array('status' => 'error', 'message' => 'Failed to assigned project'));
         }
         else
             return Response::json(array('status' => '0', 'message' => 'Project is already assigned to the user'));
