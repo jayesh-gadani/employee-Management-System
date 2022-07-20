@@ -78,6 +78,7 @@ class User extends Authenticatable
             'status' => '0',
             'token' => $token    
         ]);
+
         if ($user)
             return(1);
         else
@@ -95,7 +96,7 @@ class User extends Authenticatable
 
         $users = User::paginate($perPage);
 
-        return($users);
+        return $users;
     }
 
     /**
@@ -121,9 +122,9 @@ class User extends Authenticatable
         $user->updated_by = $id;
         $user->save();
         if ($user)
-            return(1);
+            return 1 ;
         else
-            return(0);
+            return 0;
     }
     /**
      * [deleteUser function is used to delete user]
@@ -189,9 +190,12 @@ class User extends Authenticatable
 
     /**
      * [changePassword function is used to change password]
+     * 
      * @param  [object] $user [data of user table]
      * @param  [object] $data [data of user form]
+     * 
      * @return [boolean]      [true for sucess and false on failer]
+     * 
      */
     public function changePassword($user, $data)
     {

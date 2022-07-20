@@ -33,14 +33,6 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::displayAll();
-
-        /**if ($users->onLastPage() < $request->get('page')) {
-            echo "<pre>"; print_r('check'); exit;
-            return redirect()->route('user');
-           
-        }
-        echo "<pre>"; print_r($users->onLastPage().' '.$request->get('page')); exit;
-         */
         return view("ViewUser", compact('users'));
     }
 
@@ -65,18 +57,18 @@ class UserController extends Controller
                 $email = $data["email"];
             }
 
-            $result = $user->addUser($data,$password);
+            $result = $user->addUser($data, $password);
 
             if ( $email ) {
 
                 $send = Mail::send('email_password', ['data' => $data, 'password' => $password], function($message) use ($email, $data) {
                     $message->to($email)->subject('Find your temporary password');
-                    $message->from(config('from_email'),config('from_name'));
+                    $message->from(config('from_email'), config('from_name'));
                 });
 
             }
 
-            $request->session()->flash('success', 'User Added Sucessfully!');
+            $request->session()->flash('success', 'User added sucessfully!');
 
             return redirect()->route('user');
 
@@ -98,9 +90,9 @@ class UserController extends Controller
 
         $result = User::deleteUser($data);
         if ($result == 1) {
-            $request -> session() -> flash('success', 'User deleted successful!');
+            $request -> session() -> flash('success', 'User deleted successfully!');
         } else {
-            $request -> session() -> flash('error', 'Result not deleted!');
+            $request -> session() -> flash('error', 'User not deleted!');
         }
 
         return Response::json(array('message' => 'User deleted sucessfully '));
@@ -128,8 +120,8 @@ class UserController extends Controller
            
             $user = new User();
             $result = $user->editUser($data, $id);
-            if($result) {
-                $request -> session() -> flash('success', 'User updated Sucessfully!');
+            if ($result) {
+                $request -> session() -> flash('success', 'User updated sucessfully!');
                 return redirect() -> route('user');    
             }
         }
@@ -148,10 +140,10 @@ class UserController extends Controller
 
         $result = User::parmission($id);
 
-        if($result)
-            $message = "Parmission Approval!";
+        if ($result)
+            $message = "Parmission approved!";
         else
-             $message = "Parmission Dis Approval!";
+             $message = "Parmission revoked!";
 
         $request -> session() -> flash('success', $message);
         return redirect() -> route('user');
@@ -175,11 +167,11 @@ class UserController extends Controller
                 'role' => 'required',
                 'position' => 'required',
             ], [
-                'name.required' => 'Please enter your name.',
+                'name.required' => 'Please enter name.',
                 'name.max' => 'Only 255 character allowed in name.',
                 'name.min' => 'Minimum three character required in name.',
                 'name.regex' => 'Number not allowed',
-                'email.required' => 'Please enter your email.',
+                'email.required' => 'Please enter email.',
                 'email.email' => 'Please enter valid email address.',
                 'email.unique' => 'Email address is already exists.',
                 'contact.required' => 'Please enter contact number.',

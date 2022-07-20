@@ -81,14 +81,10 @@
                             <small class="badge badge-success">Approved</small></a>
                             
                         @endif</td>
-                    <td><a href='{{ route('edit',['id' => $user->id]) }}'><i class='far fa-edit' title='Edit User'></i></a> 
+                    <td><a href='{{ route('edit',['id' => $user->id]) }}'><i class='far fa-edit' title='Edit user'></i></a> 
 
-                        <a class="confirm" data-title="{{$user->name}}" data-id="{{$user->id}}"><i class='fas fa-trash' title="Delete User"></i></a> 
+                        <a class="confirm" data-title="{{$user->name}}" data-id="{{$user->id}}"><i class='fas fa-trash' title="Delete user"></i></a> 
   
-
-
-
-
                   </tr>
                   
                     @endforeach
@@ -116,17 +112,15 @@
 <script>
     $(document).ready(function()
         {
-            
-            
-                setInterval(function () {
-                     $("#successMessage").hide(1000);
-                },2000);
-           
+            setInterval(function () {
+                 $("#successMessage").hide(1000);
+            },2000);
+       
             $(document).on('click', '.confirm', function(event) {
                 event.preventDefault();
-                var id=$(this).data('id');
-                var title=$(this).data('title');
-                var result=confirm("Are you sure you want to delete "+ title +" user ?");
+                var id = $(this).data('id');
+                var title = $(this).data('title');
+                var result = confirm("Are you sure you want to delete "+ title +" user ?");
                 
                 if (result) {
                 
