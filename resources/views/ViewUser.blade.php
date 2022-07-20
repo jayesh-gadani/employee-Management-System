@@ -33,7 +33,7 @@
                 </div>
               @endif
               @if(Session::has('error'))
-                <div class="alert alert-danger" role="alert">
+                <div id="errorMessage" class="alert alert-danger" role="alert">
                   {{ Session::get('error') }}
                 </div>
               @endif
@@ -120,6 +120,7 @@
             
                 setInterval(function () {
                      $("#successMessage").hide(1000);
+                     $("#errorMessage").hide(1000);
                 },2000);
            
             $(document).on('click', '.confirm', function(event) {

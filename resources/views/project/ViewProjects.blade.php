@@ -13,7 +13,9 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
-              <li class="breadcrumb-item active"><a href="{{route('listing_project')}}">List projects</a></li>
+              <li class="breadcrumb-item active"><a href="{{route('listing_project')}}">List</a></li>
+              <li class="breadcrumb-item active">Projects</li>
+              </li>
             </ol>
           </div>
         </div>
@@ -27,12 +29,12 @@
         <div class="row">
           <div class="col-12">
               @if(Session::has('success'))
-                <div class="alert alert-success" role="alert">
+                <div id="successMessage" class="alert alert-success" role="alert">
                   {{ Session::get('success') }}
                 </div>
               @endif
               @if(Session::has('error'))
-                <div class="alert alert-danger" role="alert">
+                <div id="errorMessage" class="alert alert-danger" role="alert">
                   {{ Session::get('error') }}
                 </div>
               @endif
@@ -42,16 +44,16 @@
                 <h3 class="card-title"></h3> <div align='right'><a class="btn btn-primary" href='{{route('add_project')}}'>Add new project</a></div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+             <div class="card-body table-responsive p-0">
+                <table id="example2" class="table table-hover text-nowrap">
                   <thead>
                   <tr>
                     <th>Title</th>
                     <th>Description</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
+                    <th>Start date</th>
+                    <th>End date</th>
                     <th>Status</th>
-                    <th>Assign Project</th>  
+                    <th>Assign project</th>  
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -72,12 +74,12 @@
 
 
                     </td>
-                    <td><a class='smallButton' name="{{$project->title}}" href='' id="{{$project->id}}">Assign Project</a></td>
+                    <td><a class='smallButton' name="{{$project->title}}" href='' id="{{$project->id}}">Assign project</a></td>
                     <td>
 
-                      <a href="{{ route('edit_project',['id' => $project->id]) }}"><i class='far fa-edit' title='Edit Project'></i></a>
+                      <a href="{{ route('edit_project',['id' => $project->id]) }}"><i class='far fa-edit' title='Edit project'></i></a>
                      
-                       <a class='confirm' data-title="{{$project->title}}" href='' data-id="{{$project->id}}"><i class='fas fa-trash' title="Delete Project"></i></a>
+                       <a class='confirm' data-title="{{$project->title}}" href='' data-id="{{$project->id}}"><i class='fas fa-trash' title="Delete project"></i></a>
                     </td>
                        
                   </tr>
@@ -100,23 +102,19 @@
 
             </div>
 
-
-
-
         <script>
         // display a modal (small modal)
         $(document).ready(function()
         {
+             setInterval(function () {
+                $("#successMessage").hide(1000);
+                $("#errorMessage").hide(1000);
+            },2000);
+
+            
             $(document).on('click', '.smallButton', function(event) {
                 event.preventDefault();
             
-                /*
-                var projectName=event.target.name;
-                $('#projectName').text(projectName);
-                var x=event.target.id;
-                $('#projectId').val(x);
-                */
-               
                 var x=event.target.id;
                 $.ajax({
                     url : "{{ route('modalLoad') }}",
@@ -134,15 +132,15 @@
                     }
                 });
             });
-              $(document).on('click', '#assign_btn', function(event){
-                
+            
+            $(document).on('click', '#assign_btn', function(event) {
                $.ajax({
                     url : "{{ route('projectAssign') }}",
                     type: "POST",
                     data : $('#form').serialize(),
                     success: function(data, textStatus, jqXHR)
                     {
-                      if(data['status']=="failed")
+                      if(data['status'] == "failed")
                       {
                         $("#message").html(data['message']);
                       }
@@ -162,52 +160,39 @@
                 });
             });
 
-               $(document).on('click', '.confirm', function(event) {
+            $(document).on('click', '.confirm', function(event) {
                 event.preventDefault();
-                var id=$(this).data('id');
-                var title=$(this).data('title');
-                var result=confirm("Are you sure you want to delete"+title+" Project ?");
+                var id = $(this).data('id');
+                var title = $(this).data('title');
+                var result = confirm("Are you sure you want to delete "+title+" project ?");
 
                 if (result) {
                 
                  $.ajax({
-                    url : "{{ route('delete_project') }}",
-                    type: "GET",
-                    data:{id:id},
-                    success: function(data, textStatus, jqXHR)
-                    {
+                      url : "{{ route('delete_project') }}",
+                      type: "GET",
+                      data:{id:id},
+                      success: function(data, textStatus, jqXHR)
+                      {
 
-                         location.reload(); 
-                    },
-                    error: function (jqXHR, textStatus, errorThrown)
-                    {
-                 
-                    }
-                   });
+                           location.reload(); 
+                      },
+                      error: function (jqXHR, textStatus, errorThrown)
+                      {
+                   
+                      }
+                  });
 
                }
                else {
                 location.reload();
 
                }
-
             }); 
-
         });
 
        </script>
-
-            <!-- /.card -->
           </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-  
-
-
-  
 @endsection
