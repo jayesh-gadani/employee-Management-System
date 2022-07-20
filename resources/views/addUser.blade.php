@@ -1,7 +1,6 @@
 @extends('layout')
-@section('pageTitle','New User Registration')
+@section('pageTitle','Add new user')
 @section('content')
-
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -9,14 +8,14 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>
-            {{isset($user->name)?'Update user':'Add user'}}
+            {{isset($user->name) ? 'Update user' : 'Add user'}}
             </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{'/home'}}">Home</a></li>
               <li class="breadcrumb-item active"><a href='{{route('user')}}'>User</a></li>
-              <li class="breadcrumb-item active">{{isset($user->name)?'Update':'Add'}}</li>
+              <li class="breadcrumb-item active">{{isset($user->name) ? 'Update' : 'Add'}}</li>
             </ol>
           </div>
         </div>
@@ -44,7 +43,9 @@
               @endif
               <div class="card-header">
 
-                <h3 class="card-title">{{isset($user->name)?'Update user':'Add user'}}<small></small></h3>
+                <h3 class="card-title">
+                    {{isset($user->name)?'Update user':'Add user'}}
+                </h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -53,7 +54,8 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Name</label><span class='text-danger'>*</span>
+                    <label for="exampleInputEmail1">Name</label>
+                    <span class='text-danger'>*</span>
                     <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="Enter name"  value="{{ old('name') ? old('name') : $user->name}}">
                     @error('name')
                       <div style="color:red">{{ $message }}</div>
@@ -85,15 +87,17 @@
                   <div class="form-group">
 
                     <label for="exampleInputEmail1">Role</label><span class='text-danger'>*</span>
-                    <select  name="role" class="form-control" id="exampleInputEmail1" {{ old('role') ? old('role') : $user->role}}> 
+                    <select  name="role" class="form-control" id="exampleInputEmail1"> 
                       <option value="">Select role</option>
                      
                       @foreach(config('global.roles') as $key => $value)
-                                @if((isset($user->role) && $key == $user->role) or old('role') == $key)
-                                    <option value='{{$key}}' selected>{{$value}}</option>
-                                @else
-                                    <option value='{{$key}}'>{{$value}}</option>
-                                @endif       
+                        @if(old('role') == $key)
+                            <option value='{{$key}}' selected>{{$value}}</option>
+                        @elseif(isset($user->role) && $key == $user->role && !old('role') )
+                            <option value='{{$key}}' selected>{{$value}}</option>
+                        @else
+                            <option value='{{$key}}'>{{$value}}</option> 
+                        @endif       
                       @endforeach
 
                     </select>
@@ -107,11 +111,13 @@
                     <select  name="position" class="form-control" id="exampleInputEmail1">
                       <option value="">Select position</option>
                        @foreach(config('global.positions') as $key => $value)
-                                @if((isset($user->position) && $key == $user->position) or old('position') == $key )
-                                    <option value='{{$key}}' selected>{{$value}}</option>
-                                @else
-                                    <option value='{{$key}}'>{{$value}}</option>
-                                @endif    
+                            @if(old('position') == $key)
+                                <option value='{{$key}}' selected>{{$value}}</option>
+                            @elseif(isset($user->position) && $key == $user->position && !old('position') )
+                                 <option value='{{$key}}' selected>{{$value}}</option>
+                            @else
+                            <option value='{{$key}}'>{{$value}}</option> 
+                        @endif     
                       @endforeach
 
                     </select>
@@ -140,6 +146,5 @@
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  
-  
+
 @endsection
